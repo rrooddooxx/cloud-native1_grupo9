@@ -1,4 +1,4 @@
-import {Component, Inject, inject, OnInit} from '@angular/core';
+import {Component, Inject, inject, OnInit, OnDestroy} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -8,8 +8,8 @@ import {
     MsalGuardConfiguration,
     MsalService
 } from "@azure/msal-angular";
-import {Subject} from "rxjs";
-import {AuthenticationResult, PopupRequest} from "@azure/msal-browser";
+import {Subject, takeUntil} from "rxjs";
+import {AuthenticationResult, PopupRequest, EventType} from "@azure/msal-browser";
 
 @Component({
     selector: 'app-shell',
@@ -18,9 +18,8 @@ import {AuthenticationResult, PopupRequest} from "@azure/msal-browser";
     templateUrl: './shell.component.html',
     styleUrls: ['./shell.component.scss']
 })
-export class ShellComponent implements OnInit {
+export class ShellComponent implements OnInit, OnDestroy {
     isMenuOpen = false;
-    // Mock user data - later replace with AuthService
     isAuthenticated = false;
     tokenExpiration: string = '';
     currentUser = {
@@ -37,10 +36,31 @@ export class ShellComponent implements OnInit {
     ) {
     }
 
-
     ngOnInit(): void {
-
+        // Set initial authentication state
+        this.updateAuthenticationState();
+        
+        // Subscribe to MSAL events to update authentication state
+        this.msalBroadcastService.msalSubject$
+            .pipe(takeUntil(this._destroying$))
+            .subscribe((result) => {
+                if (result.eventType === EventType.LOGIN_SUCCESS || 
+                    result.eventType === EventType.LOGOUT_SUCCESS ||
+                    result.eventType === EventType.ACQUIRE_TOKEN_SUCCESS) {
+                    this.updateAuthenticationState();
+                }
+            });
     }
+
+    ngOnDestroy(): void {
+        this._destroying$.next();
+        this._destroying$.complete();
+    }
+
+    private updateAuthenticationState(): void {
+        this.isAuthenticated = Boolean(this.authService.instance.getActiveAccount() !== null);
+    }
+
 
     toggleMenu() {
         this.isMenuOpen = !this.isMenuOpen;
@@ -50,12 +70,13 @@ export class ShellComponent implements OnInit {
         this.isMenuOpen = false;
     }
 
-    logout() {
-        // TODO: Implement logout with AuthService
-        this.isAuthenticated = false;
-        this.router.navigate(['/home']);
-        this.closeMenu();
-    }
+    /*   logout() {
+           // TODO: Implement logout with AuthService
+           this.isAuthenticated = false;
+           this.router.navigate(['/home']);
+           this.closeMenu();
+       }*/
+
 
     login() {
         if (this.msalGuardConfig.authRequest) {
@@ -63,15 +84,15 @@ export class ShellComponent implements OnInit {
                 .loginPopup({...this.msalGuardConfig.authRequest} as PopupRequest)
                 .subscribe((response: AuthenticationResult) => {
                     this.authService.instance.setActiveAccount(response.account);
-
-                    // Obtener y guardar el token de acceso
                     this.authService.acquireTokenSilent({scopes: ['User.Read']}).subscribe({
                         next: (tokenResponse) => {
-                            localStorage.setItem('jwt', tokenResponse.idToken); // Guarda el token en el localStorage
+                            localStorage.setItem('jwt', tokenResponse.idToken);
                             console.log('ID token guardado en localStorage:', tokenResponse.idToken);
+                            this.updateAuthenticationState();
                         },
                         error: (error) => {
                             console.error('Error obteniendo el token de acceso:', error);
+                            this.updateAuthenticationState();
                         },
                     });
                 });
@@ -80,18 +101,29 @@ export class ShellComponent implements OnInit {
                 .loginPopup()
                 .subscribe((response: AuthenticationResult) => {
                     this.authService.instance.setActiveAccount(response.account);
-
-                    // Obtener y guardar el token de acceso
                     this.authService.acquireTokenSilent({scopes: ['User.Read']}).subscribe({
                         next: (tokenResponse) => {
                             localStorage.setItem('jwt', tokenResponse.accessToken);
                             console.log('ID token guardado en localStorage:', tokenResponse.accessToken);
+                            this.updateAuthenticationState();
                         },
                         error: (error) => {
                             console.error('Error obteniendo el token de acceso:', error);
+                            this.updateAuthenticationState();
                         },
                     });
                 });
         }
+    }
+
+    logout(popup?: boolean) {
+        if (popup) {
+            this.authService.logoutPopup({
+                mainWindowRedirectUri: '/',
+            });
+        } else {
+            this.authService.logoutRedirect();
+        }
+        this.updateAuthenticationState();
     }
 }
