@@ -1,0 +1,156 @@
+<!-- Register Page -->
+<div class="register-page min-vh-100 d-flex align-items-center bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="card card-modern border-0 shadow-lg">
+          <div class="card-body p-5">
+            <!-- Header -->
+            <div class="text-center mb-4">
+              <h2 class="text-brand mb-2">Crear Cuenta</h2>
+              <p class="text-secondary">Únete a nuestra plataforma</p>
+            </div>
+
+            <!-- Register Form -->
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              <!-- Name Field -->
+              <div class="mb-3">
+                <label for="name" class="form-label fw-medium">Nombre Completo</label>
+                <div class="position-relative">
+                  <input
+                    type="text"
+                    id="name"
+                    class="form-control form-control-lg"
+                    formControlName="name"
+                    placeholder="Tu nombre completo"
+                    [class.is-invalid]="name?.invalid && name?.touched">
+                  <i class="bi bi-person position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                </div>
+                <div class="invalid-feedback" *ngIf="name?.invalid && name?.touched">
+                  <div *ngIf="name?.errors?.['required']">El nombre es requerido</div>
+                  <div *ngIf="name?.errors?.['minlength']">Mínimo 2 caracteres</div>
+                </div>
+              </div>
+
+              <!-- Email Field -->
+              <div class="mb-3">
+                <label for="email" class="form-label fw-medium">Email</label>
+                <div class="position-relative">
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control form-control-lg"
+                    formControlName="email"
+                    placeholder="tu@email.com"
+                    [class.is-invalid]="email?.invalid && email?.touched">
+                  <i class="bi bi-envelope position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                </div>
+                <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+                  <div *ngIf="email?.errors?.['required']">El email es requerido</div>
+                  <div *ngIf="email?.errors?.['email']">Ingresa un email válido</div>
+                </div>
+              </div>
+
+              <!-- Password Field -->
+              <div class="mb-3">
+                <label for="password" class="form-label fw-medium">Contraseña</label>
+                <div class="position-relative">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    id="password"
+                    class="form-control form-control-lg"
+                    formControlName="password"
+                    placeholder="••••••••"
+                    [class.is-invalid]="password?.invalid && password?.touched">
+                  <button
+                    type="button"
+                    class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-muted border-0 bg-transparent"
+                    (click)="togglePasswordVisibility('password')">
+                    <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback" *ngIf="password?.invalid && password?.touched">
+                  <div *ngIf="password?.errors?.['required']">La contraseña es requerida</div>
+                  <div *ngIf="password?.errors?.['minlength']">Mínimo 6 caracteres</div>
+                </div>
+              </div>
+
+              <!-- Confirm Password Field -->
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label fw-medium">Confirmar Contraseña</label>
+                <div class="position-relative">
+                  <input
+                    [type]="showConfirmPassword ? 'text' : 'password'"
+                    id="confirmPassword"
+                    class="form-control form-control-lg"
+                    formControlName="confirmPassword"
+                    placeholder="••••••••"
+                    [class.is-invalid]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)">
+                  <button
+                    type="button"
+                    class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-muted border-0 bg-transparent"
+                    (click)="togglePasswordVisibility('confirmPassword')">
+                    <i [class]="showConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback" *ngIf="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched)">
+                  <div *ngIf="confirmPassword?.errors?.['required']">Confirma tu contraseña</div>
+                  <div *ngIf="registerForm.errors?.['passwordMismatch']">Las contraseñas no coinciden</div>
+                </div>
+              </div>
+
+              <!-- Terms and Conditions -->
+              <div class="mb-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    class="form-check-input"
+                    formControlName="terms"
+                    [class.is-invalid]="terms?.invalid && terms?.touched">
+                  <label class="form-check-label text-secondary" for="terms">
+                    Acepto los <a href="#" class="text-decoration-none">términos y condiciones</a> 
+                    y la <a href="#" class="text-decoration-none">política de privacidad</a>
+                  </label>
+                </div>
+                <div class="invalid-feedback d-block" *ngIf="terms?.invalid && terms?.touched">
+                  Debes aceptar los términos y condiciones
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                class="btn btn-primary-custom btn-lg w-100 mb-3"
+                [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isLoading ? 'Creando cuenta...' : 'Crear Cuenta' }}
+              </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider-text my-4">
+              <span class="bg-white px-3 text-muted">o</span>
+            </div>
+
+            <!-- Login Link -->
+            <div class="text-center">
+              <span class="text-secondary">¿Ya tienes cuenta? </span>
+              <a routerLink="/auth/login" class="text-decoration-none fw-medium">
+                Inicia sesión aquí
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center mt-3">
+          <a routerLink="/home" class="text-decoration-none text-muted">
+            <i class="bi bi-arrow-left me-2"></i>
+            Volver al inicio
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
