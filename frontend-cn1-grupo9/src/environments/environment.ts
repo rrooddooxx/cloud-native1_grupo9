@@ -4,7 +4,13 @@ export const environment = {
     apiUrl: 'https://api.ecomm-cloud.com',
     msalConfig: {
         auth: {
-            clientId: '192bbaf7-b1f7-44eb-9af1-0f9a3045b2ff'
-        }
+            clientId: '59d93efc-d6d0-44a2-8107-35a3315120f9',
+            authority: 'https://login.microsoftonline.com/common'
+        },
+
+    },
+    apiConfig: {
+        scopes: ['openid'],
+        uri: 'https://graph.microsoft.com/v1.0/me',
     },
 };

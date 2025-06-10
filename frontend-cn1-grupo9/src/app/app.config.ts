@@ -13,14 +13,18 @@ import {
     HTTP_INTERCEPTORS,
     provideHttpClient,
     withFetch,
+    withInterceptors,
     withInterceptorsFromDi
 } from "@angular/common/http";
 import {MsalGuardConfigurationFactory, MSALInstanceFactory} from './config/msal.config';
+import {authInterceptorProvider} from "./interceptors/auth-interceptor.interceptor";
 
 export const appConfig: ApplicationConfig = {
     providers: [provideZoneChangeDetection({eventCoalescing: true}),
         provideRouter(routes),
-        provideHttpClient(withInterceptorsFromDi(), withFetch()),
+        provideHttpClient(withInterceptorsFromDi(),
+            withFetch(),
+            withInterceptors([authInterceptorProvider])),
         {
             provide: HTTP_INTERCEPTORS,
             useClass: MsalInterceptor,
@@ -36,5 +40,6 @@ export const appConfig: ApplicationConfig = {
         },
         MsalService,
         MsalBroadcastService,
-        MsalGuard]
+        MsalGuard
+    ]
 };

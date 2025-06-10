@@ -7,7 +7,7 @@ import {
     PublicClientApplication
 } from '@azure/msal-browser';
 import {environment} from '../../environments/environment';
-import {MsalGuardConfiguration} from "@azure/msal-angular";
+import {MsalGuardConfiguration, MsalInterceptorConfiguration} from "@azure/msal-angular";
 
 
 export function MSALInstanceFactory(): IPublicClientApplication {
@@ -17,7 +17,8 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 export const msalConfig: Configuration = {
     auth: {
         clientId: environment.msalConfig.auth.clientId,
-        redirectUri: 'http://localhost:4200',
+        authority: environment.msalConfig.auth.authority,
+        redirectUri: 'http://localhost:4200/user/dashboard',
     },
     cache: {
         cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -33,8 +34,21 @@ export const msalConfig: Configuration = {
     }
 }
 
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+    const protectedResourceMap = new Map<string, Array<string>>();
+    protectedResourceMap.set(
+        environment.apiConfig.uri,
+        environment.apiConfig.scopes
+    );
+
+    return {
+        interactionType: InteractionType.Redirect,
+        protectedResourceMap,
+    };
+}
+
 export const loginRequestConfig = {
-    scopes: [],
+    scopes: [...environment.apiConfig.scopes],
 };
 
 export function MsalGuardConfigurationFactory(): MsalGuardConfiguration {
