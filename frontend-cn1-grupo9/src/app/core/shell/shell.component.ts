@@ -1,9 +1,15 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, Inject, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {MsalService} from "@azure/msal-angular";
+import {
+    MSAL_GUARD_CONFIG,
+    MsalBroadcastService,
+    MsalGuardConfiguration,
+    MsalService
+} from "@azure/msal-angular";
 import {Subject} from "rxjs";
+import {AuthenticationResult, PopupRequest} from "@azure/msal-browser";
 
 @Component({
     selector: 'app-shell',
@@ -25,13 +31,15 @@ export class ShellComponent implements OnInit {
     private router = inject(Router);
 
     constructor(
+        @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
         private authService: MsalService,
+        private msalBroadcastService: MsalBroadcastService
     ) {
     }
 
 
     ngOnInit(): void {
-       
+
     }
 
     toggleMenu() {
@@ -50,6 +58,40 @@ export class ShellComponent implements OnInit {
     }
 
     login() {
-        this.authService.loginRedirect();
+        if (this.msalGuardConfig.authRequest) {
+            this.authService
+                .loginPopup({...this.msalGuardConfig.authRequest} as PopupRequest)
+                .subscribe((response: AuthenticationResult) => {
+                    this.authService.instance.setActiveAccount(response.account);
+
+                    // Obtener y guardar el token de acceso
+                    this.authService.acquireTokenSilent({scopes: ['User.Read']}).subscribe({
+                        next: (tokenResponse) => {
+                            localStorage.setItem('jwt', tokenResponse.idToken); // Guarda el token en el localStorage
+                            console.log('ID token guardado en localStorage:', tokenResponse.idToken);
+                        },
+                        error: (error) => {
+                            console.error('Error obteniendo el token de acceso:', error);
+                        },
+                    });
+                });
+        } else {
+            this.authService
+                .loginPopup()
+                .subscribe((response: AuthenticationResult) => {
+                    this.authService.instance.setActiveAccount(response.account);
+
+                    // Obtener y guardar el token de acceso
+                    this.authService.acquireTokenSilent({scopes: ['User.Read']}).subscribe({
+                        next: (tokenResponse) => {
+                            localStorage.setItem('jwt', tokenResponse.accessToken);
+                            console.log('ID token guardado en localStorage:', tokenResponse.accessToken);
+                        },
+                        error: (error) => {
+                            console.error('Error obteniendo el token de acceso:', error);
+                        },
+                    });
+                });
+        }
     }
 }
