@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: bff
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://login.microsoftonline.com/fd8b1c6f-f500-42ec-9595-bdeabada8987/v2.0
+server:
+  port: 8080
