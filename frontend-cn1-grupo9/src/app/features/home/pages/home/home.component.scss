@@ -1,0 +1,126 @@
+// Home Component Styles
+.hero-section {
+  min-height: 600px;
+  position: relative;
+  
+  .hero-image img {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+  }
+}
+
+.products-section {
+  .card-img-container {
+    height: 250px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+    
+    .overlay-gradient {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        transparent 70%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+      opacity: 0;
+      transition: var(--transition);
+    }
+  }
+  
+  .card:hover {
+    .product-image {
+      transform: scale(1.05);
+    }
+    
+    .overlay-gradient {
+      opacity: 1;
+    }
+  }
+}
+
+.pricing-section {
+  .original-price {
+    font-size: 0.9rem;
+  }
+  
+  .discounted-price {
+    font-weight: 700;
+  }
+}
+
+.promotion-timer {
+  background: rgba(var(--accent-color), 0.1);
+  padding: 8px 12px;
+  border-radius: calc(var(--border-radius) / 2);
+  border-left: 3px solid var(--accent-color);
+}
+
+.cta-section {
+  background: linear-gradient(
+    135deg,
+    var(--bg-secondary) 0%,
+    #f0f0f0 100%
+  );
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 500px;
+    text-align: center;
+    
+    .text-hero {
+      font-size: 2.5rem;
+    }
+  }
+  
+  .products-section {
+    .card-img-container {
+      height: 200px;
+    }
+  }
+  
+  .cta-section {
+    .btn {
+      width: 100%;
+      margin-bottom: 1rem;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Z-index utilities
+.z-index-1 {
+  z-index: 1;
+}
+
+// Badge animations
+.badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

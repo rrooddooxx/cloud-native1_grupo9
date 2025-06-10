@@ -1,0 +1,145 @@
+// Theme colors - Nike inspired
+:root {
+  --primary-color: #000000;
+  --secondary-color: #ffffff;
+  --accent-color: #ff6900;
+  --text-primary: #111111;
+  --text-secondary: #707072;
+  --text-light: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f7;
+  --bg-dark: #000000;
+  --border-color: #e5e5e5;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+// Typography
+.text-brand {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.text-hero {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.text-large {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+// Buttons
+.btn-primary-custom {
+  background: var(--primary-color);
+  border: none;
+  color: var(--text-light);
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &:hover {
+    background: #333333;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+  }
+}
+
+.btn-outline-custom {
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &:hover {
+    background: var(--primary-color);
+    color: var(--text-light);
+    transform: translateY(-2px);
+  }
+}
+
+// Cards
+.card-modern {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+  }
+}
+
+// Navigation
+.navbar-modern {
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  
+  .navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+  
+  .nav-link {
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: var(--transition);
+    
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
+}
+
+// Utilities
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #333333 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Layout
+.container-modern {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-padding {
+  padding: 80px 0;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .text-hero {
+    font-size: 2.5rem;
+  }
+  
+  .section-padding {
+    padding: 60px 0;
+  }
+  
+  .container-modern {
+    padding: 0 16px;
+  }
+}

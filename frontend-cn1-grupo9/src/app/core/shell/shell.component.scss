@@ -1,0 +1,155 @@
+// Shell Component Styles
+.navbar-modern {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-light);
+  
+  .navbar-brand {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  
+  .nav-link {
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: var(--transition);
+    position: relative;
+    
+    &:hover {
+      color: var(--accent-color);
+    }
+    
+    &.active {
+      color: var(--accent-color);
+      font-weight: 600;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 2px;
+        background: var(--accent-color);
+        border-radius: 1px;
+      }
+    }
+  }
+  
+  .navbar-toggler {
+    border: none;
+    padding: 4px 8px;
+    
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  
+  .dropdown-toggle {
+    &::after {
+      display: none;
+    }
+  }
+}
+
+// User Avatar
+.rounded-circle {
+  object-fit: cover;
+  border: 2px solid var(--border-color);
+  transition: var(--transition);
+  
+  &:hover {
+    border-color: var(--accent-color);
+  }
+}
+
+// Dropdown Menu
+.dropdown-menu {
+  border: none;
+  box-shadow: var(--shadow-medium);
+  border-radius: var(--border-radius);
+  padding: 8px 0;
+  margin-top: 8px;
+  
+  .dropdown-item {
+    padding: 12px 20px;
+    font-weight: 500;
+    transition: var(--transition);
+    
+    &:hover {
+      background-color: var(--bg-secondary);
+      color: var(--accent-color);
+    }
+    
+    i {
+      width: 16px;
+      opacity: 0.7;
+    }
+  }
+  
+  .dropdown-divider {
+    margin: 8px 0;
+  }
+}
+
+// Mobile Menu Overlay
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Main Layout
+main {
+  min-height: calc(100vh - 76px); // Account for navbar height
+}
+
+// Responsive Design
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    margin-top: 16px;
+    padding: 20px;
+    
+    .navbar-nav {
+      .nav-link {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-color);
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        &.active::after {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .container-modern {
+    padding: 0 16px;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+}

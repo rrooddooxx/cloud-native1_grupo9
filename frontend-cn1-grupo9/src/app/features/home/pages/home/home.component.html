@@ -1,0 +1,120 @@
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-primary text-light section-padding">
+  <div class="container-modern">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="text-hero mb-4">
+          Descubre productos <span class="text-gradient">increíbles</span>
+        </h1>
+        <p class="text-large mb-4">
+          Una experiencia de compra única donde encontrarás los mejores productos de tecnología y más.
+        </p>
+        <button class="btn btn-outline-custom btn-lg">
+          Explorar Productos
+        </button>
+      </div>
+      <div class="col-lg-6 d-none d-lg-block">
+        <div class="hero-image">
+          <img 
+            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop" 
+            alt="Hero Image" 
+            class="img-fluid rounded">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section section-padding">
+  <div class="container-modern">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h2 class="text-brand mb-3">Productos Destacados</h2>
+        <p class="text-secondary">Descubre nuestra selección de productos premium</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6" *ngFor="let product of products">
+        <div class="card card-modern h-100 position-relative">
+          <!-- Promotion Badge -->
+          <div 
+            *ngIf="product.promotion && isPromotionValid(product.promotion)"
+            class="position-absolute top-0 start-0 m-3 z-index-1">
+            <span class="badge bg-danger fs-6">
+              -{{ product.promotion.discount }}%
+            </span>
+          </div>
+
+          <!-- Product Image -->
+          <div class="card-img-container position-relative overflow-hidden">
+            <img 
+              [src]="product.imageUrl" 
+              [alt]="product.title"
+              class="card-img-top product-image">
+            <div class="overlay-gradient"></div>
+          </div>
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-brand">{{ product.title }}</h5>
+            <p class="card-text text-secondary flex-grow-1">{{ product.description }}</p>
+            
+            <!-- Pricing -->
+            <div class="pricing-section mb-3">
+              <div *ngIf="product.promotion && isPromotionValid(product.promotion); else normalPrice">
+                <span class="original-price text-muted text-decoration-line-through me-2">
+                  {{ formatPrice(product.price) }}
+                </span>
+                <span class="discounted-price h5 text-danger mb-0">
+                  {{ formatPrice(getDiscountedPrice(product)) }}
+                </span>
+              </div>
+              <ng-template #normalPrice>
+                <span class="h5 text-primary mb-0">{{ formatPrice(product.price) }}</span>
+              </ng-template>
+            </div>
+
+            <!-- Promotion Timer -->
+            <div 
+              *ngIf="product.promotion && isPromotionValid(product.promotion)" 
+              class="promotion-timer mb-3">
+              <small class="text-muted">
+                <i class="bi bi-clock me-1"></i>
+                Promoción válida hasta: {{ product.promotion.endsAt | date:'dd/MM/yyyy HH:mm' }}
+              </small>
+            </div>
+
+            <!-- Buy Button -->
+            <button 
+              class="btn btn-primary-custom w-100"
+              (click)="buyProduct(product)">
+              <i class="bi bi-cart-plus me-2"></i>
+              Comprar Ahora
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section bg-secondary section-padding">
+  <div class="container-modern">
+    <div class="row text-center">
+      <div class="col-lg-8 mx-auto">
+        <h3 class="text-brand mb-3">¿Tienes productos para vender?</h3>
+        <p class="text-secondary mb-4">
+          Únete a nuestra plataforma y comienza a vender tus productos hoy mismo.
+        </p>
+        <button class="btn btn-primary-custom btn-lg me-3">
+          Comenzar a Vender
+        </button>
+        <button class="btn btn-outline-custom btn-lg">
+          Saber Más
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
