@@ -5,6 +5,18 @@
       <div class="col-lg-5 col-md-7">
         <div class="card card-modern border-0 shadow-lg">
           <div class="card-body p-5">
+            
+            <!-- Redirecting to Microsoft Login -->
+            <div *ngIf="isRedirecting" class="text-center">
+              <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <h4 class="text-brand mb-2">Redirigiendo a Microsoft</h4>
+              <p class="text-secondary">Serás redirigido al sistema de autenticación de Microsoft...</p>
+            </div>
+
+            <!-- Original Login Form (temporarily disabled) -->
+            <div *ngIf="!isRedirecting">
             <!-- Header -->
             <div class="text-center mb-4">
               <h2 class="text-brand mb-2">Bienvenido</h2>
@@ -108,6 +120,7 @@
               <a routerLink="/auth/register" class="text-decoration-none fw-medium">
                 Regístrate aquí
               </a>
+            </div>
             </div>
           </div>
         </div>
