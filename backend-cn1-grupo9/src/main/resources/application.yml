@@ -1,0 +1,10 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: cn1-grupo9
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://idp.example.com/issuer
