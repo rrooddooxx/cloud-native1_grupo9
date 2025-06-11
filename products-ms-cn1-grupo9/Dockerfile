@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim as builder
+FROM gradle:jdk21-alpine AS builder
 
 WORKDIR /app
 
@@ -12,12 +12,12 @@ COPY src/ src/
 
 RUN ./gradlew clean build -x test
 
-FROM openjdk:21-jre-slim
+FROM bellsoft/liberica-openjre-debian:21
 
 WORKDIR /app
 
 COPY --from=builder /app/build/libs/*.jar app.jar
-COPY /Users/sebastiankravetz/bbdd/Wallet_CN1G9/ /app/wallet/
+COPY wallet/ /app/wallet/
 
 EXPOSE 8080
 
