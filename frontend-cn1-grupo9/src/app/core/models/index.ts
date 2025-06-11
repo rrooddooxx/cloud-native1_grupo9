@@ -63,3 +63,11 @@ export interface CreateProductRequest {
     endsAt: Date;
   };
 }
+
+export interface DashboardReport {
+  totalProducts: number;
+  totalSales: number;
+  totalPurchases: number;
+  totalIncomeAmount: number;
+  totalIncomeAmountCurrency: string;
+}

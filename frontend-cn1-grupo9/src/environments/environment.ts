@@ -2,6 +2,7 @@ export const environment = {
     production: true,
     useMockData: false,
     apiUrl: 'http://localhost:8080/api',
+    bffUrl: 'http://localhost:8080',
     msalConfig: {
         auth: {
             clientId: '59d93efc-d6d0-44a2-8107-35a3315120f9',

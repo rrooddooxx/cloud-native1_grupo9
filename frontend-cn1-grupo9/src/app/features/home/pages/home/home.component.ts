@@ -1,9 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {HttpClient} from '@angular/common/http';
 import {Product} from '../../../../core/models';
-import {environment} from '../../../../../environments/environment';
+import {ProductsService} from '../../services/products.service';
 
 interface ProductViewModel {
     id: number;
@@ -27,7 +26,7 @@ interface ProductViewModel {
 })
 export class HomeComponent implements OnInit {
     products: ProductViewModel[] = [];
-    private http = inject(HttpClient);
+    private productsService = inject(ProductsService);
 
 
     ngOnInit() {
@@ -37,6 +36,10 @@ export class HomeComponent implements OnInit {
     getDiscountedPrice(product: ProductViewModel): number {
         if (!product.promotion) return product.price;
         return product.price * (1 - product.promotion.discount / 100);
+    }
+
+    getFinalPrice(product: ProductViewModel): number {
+        return this.getDiscountedPrice(product);
     }
 
     formatPrice(price: number): string {
@@ -57,20 +60,16 @@ export class HomeComponent implements OnInit {
     }
 
     private loadProducts() {
-        try {
-            this.http.get<Product[]>(`${environment.apiUrl}/public/products`)
-                .subscribe({
-                    next: (products) => {
-                        console.log('prod: ', products)
-
-                        this.products = this.mapToViewModel(products)
-                    },
-                    error: (error) => console.error('Error loading products:', error)
-                });
-        } catch (e) {
-            this.products = [];
-            return;
-        }
+        this.productsService.getProducts().subscribe({
+            next: (products) => {
+                console.log('prod: ', products)
+                this.products = this.mapToViewModel(products)
+            },
+            error: (error) => {
+                console.error('Error loading products:', error);
+                this.products = [];
+            }
+        });
     }
 
     private mapToViewModel(products: Product[]): ProductViewModel[] {
