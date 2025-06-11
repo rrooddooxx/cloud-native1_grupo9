@@ -1,10 +1,27 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
+  error:
+    include-stacktrace: never
 spring:
   application:
-    name: cn1-grupo9
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://idp.example.com/issuer
+    name: ${SPRING_APPLICATION_NAME:cn1-grupo9}
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.OracleDialect}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@cn1g9_high?TNS_ADMIN=/Users/sebastiankravetz/bbdd/Wallet_CN1G9}
+    username: ${SPRING_DATASOURCE_USERNAME:CN1G9}
+    password: ${SPRING_DATASOURCE_PASSWORD:cu'b32i-Eu!}d*S}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:oracle.jdbc.driver.OracleDriver}
+    hikari:
+      maximum-pool-size: ${SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE:4}
+      connection-timeout: ${SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT:30000}
+logging:
+  level:
+    root: ${LOGGING_LEVEL_ROOT:INFO}
+    org.hibernate: ${LOGGING_LEVEL_ORG_HIBERNATE:INFO}
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari: TRACE
