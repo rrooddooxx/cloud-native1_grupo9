@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -33,7 +33,7 @@ public class ProductsService {
             log.debug("Calling products service: {}", url);
             
             String response = restTemplate.getForObject(url, String.class);
-            List<Map<String, Object>> rawProducts = objectMapper.readValue(response, new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> rawProducts = objectMapper.readValue(response, new TypeReference<>() {});
             
             return rawProducts.stream()
                     .map(this::mapToProduct)
@@ -68,7 +68,7 @@ public class ProductsService {
             BigDecimal price = getBigDecimalValue(rawProduct.get("price"));
             String ownerId = getStringValue(rawProduct.get("ownerId"));
             Integer discount = getIntegerValue(rawProduct.get("discount"));
-            LocalDate endsAt = getLocalDateValue(rawProduct.get("endsAt"));
+            LocalDateTime endsAt = getLocalDateTimeValue(rawProduct.get("endsAt"));
 
             validateProduct(id, title, price);
 
@@ -140,13 +140,19 @@ public class ProductsService {
         }
     }
 
-    private LocalDate getLocalDateValue(Object value) {
+    private LocalDateTime getLocalDateTimeValue(Object value) {
         if (value == null) return null;
         try {
-            return LocalDate.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+            // Try ISO_LOCAL_DATE_TIME first
+            return LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         } catch (DateTimeParseException e) {
-            log.warn("Failed to parse date: {}", value);
-            return null;
+            try {
+                // If that fails, try parsing as date and add time
+                return LocalDateTime.parse(value.toString() + "T00:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            } catch (DateTimeParseException e2) {
+                log.warn("Failed to parse datetime: {}", value);
+                return null;
+            }
         }
     }
 }

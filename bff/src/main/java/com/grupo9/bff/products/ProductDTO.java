@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +22,8 @@ public class ProductDTO {
     private BigDecimal finalPrice;
     private String ownerId;
     private Integer discount;
-    private LocalDate discountEndsAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime discountEndsAt;
     private boolean hasDiscount;
 
     public static ProductDTO fromProduct(Product product) {
