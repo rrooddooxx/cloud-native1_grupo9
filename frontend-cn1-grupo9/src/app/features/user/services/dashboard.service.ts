@@ -12,6 +12,6 @@ export class DashboardService {
   constructor(private http: HttpClient) { }
 
   getUserReport(userId: number = 1): Observable<DashboardReport> {
-    return this.http.get<DashboardReport>(`${environment.bffUrl}/api/private/users/${userId}/report`);
+    return this.http.get<DashboardReport>(`${environment.bffUrl}/users/${userId}/report`);
   }
 }
