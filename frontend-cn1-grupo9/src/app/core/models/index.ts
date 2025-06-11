@@ -1,16 +1,14 @@
 export interface Product {
-  id: string;
+  id: number;
   title: string;
   description: string;
   imageUrl: string;
-  price: number;
+  originalPrice: number;
+  finalPrice: number;
   ownerId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  promotion?: {
-    discount: number;
-    endsAt: Date;
-  };
+  discount: number;
+  discountEndsAt: string | null;
+  hasDiscount: boolean;
 }
 
 export interface User {

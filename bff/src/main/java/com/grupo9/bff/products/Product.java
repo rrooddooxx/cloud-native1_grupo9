@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +21,8 @@ public class Product {
     private BigDecimal price;
     private String ownerId;
     private Integer discount;
-    private LocalDate endsAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime endsAt;
 
     public BigDecimal getFinalPrice() {
         if (discount == null || discount == 0) {

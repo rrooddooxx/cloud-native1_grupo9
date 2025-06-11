@@ -15,8 +15,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                                               .requestMatchers("/public/**").permitAll()
-                                               .anyRequest().authenticated()
+                                               .requestMatchers("/api/public/**").permitAll()
+                                               .requestMatchers("/api/private/**").authenticated()
+                                               .anyRequest().denyAll()
                                       )
                 .oauth2ResourceServer(oauth2 -> oauth2
                                               .jwt(Customizer.withDefaults())
