@@ -39,3 +39,8 @@ out/
 
 # Vars
 .env
+
+# Oracle Wallet
+wallet
+wallet/**
+/wallet

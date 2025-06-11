@@ -17,7 +17,6 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 export const msalConfig: Configuration = {
     auth: {
         clientId: environment.msalConfig.auth.clientId,
-        authority: environment.msalConfig.auth.authority,
         redirectUri: 'http://localhost:4200/user/dashboard',
     },
     cache: {
