@@ -1,8 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {ReactiveFormsModule} from '@angular/forms';
 import {Product} from '../../../../core/models';
 import {ProductsService} from '../../services/products.service';
+import {SalesService, SaleRequest} from '../../../../core/services/sales.service';
+import {PurchaseModalComponent, PurchaseData} from '../../../../shared/components/purchase-modal/purchase-modal.component';
 
 interface ProductViewModel {
     id: number;
@@ -20,13 +23,17 @@ interface ProductViewModel {
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [CommonModule, NgbModule],
+    imports: [CommonModule, NgbModule, ReactiveFormsModule, PurchaseModalComponent],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
     products: ProductViewModel[] = [];
+    originalProducts: Product[] = [];
+    selectedProduct: Product | null = null;
+    isModalVisible = false;
     private productsService = inject(ProductsService);
+    private salesService = inject(SalesService);
 
 
     ngOnInit() {
@@ -54,20 +61,56 @@ export class HomeComponent implements OnInit {
     }
 
     buyProduct(product: ProductViewModel): void {
-        // TODO: Implement purchase logic
-        console.log('Comprando producto:', product.title);
-        alert(`¡Producto "${product.title}" agregado al carrito!`);
+        const fullProduct = this.findFullProduct(product.id);
+        if (fullProduct) {
+            this.selectedProduct = fullProduct;
+            this.isModalVisible = true;
+        }
+    }
+
+    onModalClose(): void {
+        this.isModalVisible = false;
+        this.selectedProduct = null;
+    }
+
+    onPurchase(purchaseData: PurchaseData): void {
+        const saleRequest: SaleRequest = {
+            productId: purchaseData.productId,
+            productTitle: purchaseData.productTitle,
+            price: purchaseData.price,
+            quantity: purchaseData.quantity,
+            customerId: purchaseData.customerId,
+            customerEmail: purchaseData.customerEmail
+        };
+
+        this.salesService.createSale(saleRequest).subscribe({
+            next: (response) => {
+                console.log('Compra exitosa:', response);
+                alert(`¡Compra realizada exitosamente!\nProducto: ${response.productTitle}\nCantidad: ${response.quantity}\nTotal: $${response.price * response.quantity}`);
+                this.onModalClose();
+            },
+            error: (error) => {
+                console.error('Error en la compra:', error);
+                alert('Error al procesar la compra. Por favor, intente nuevamente.');
+            }
+        });
+    }
+
+    private findFullProduct(productId: number): Product | null {
+        return this.originalProducts.find(p => p.id === productId) || null;
     }
 
     private loadProducts() {
         this.productsService.getProducts().subscribe({
             next: (products) => {
                 console.log('prod: ', products)
+                this.originalProducts = products;
                 this.products = this.mapToViewModel(products)
             },
             error: (error) => {
                 console.error('Error loading products:', error);
                 this.products = [];
+                this.originalProducts = [];
             }
         });
     }

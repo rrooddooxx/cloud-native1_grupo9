@@ -99,6 +99,14 @@
   </div>
 </section>
 
+<!-- Purchase Modal -->
+<app-purchase-modal
+  [product]="selectedProduct"
+  [isVisible]="isModalVisible"
+  (close)="onModalClose()"
+  (purchase)="onPurchase($event)">
+</app-purchase-modal>
+
 <!-- CTA Section -->
 <section class="cta-section bg-secondary section-padding">
   <div class="container-modern">
