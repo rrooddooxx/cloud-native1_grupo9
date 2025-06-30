@@ -28,6 +28,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.oracle.database.security:oraclepki:23.8.0.25.04")
     implementation("com.oracle.database.security:osdt_cert:21.16.0.0")
     implementation("com.oracle.database.security:osdt_core:21.18.0.0")
