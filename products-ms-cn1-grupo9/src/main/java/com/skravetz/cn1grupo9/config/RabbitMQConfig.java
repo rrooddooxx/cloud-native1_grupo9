@@ -10,16 +10,15 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
+    
 
-    // Sales Queue Configuration
     public static final String SALES_QUEUE = "sales.queue";
     public static final String SALES_EXCHANGE = "sales.exchange";
-    public static final String SALES_ROUTING_KEY = "sales.routing.key";
+    public static final String SALES_ROUTING_KEY = "sales.#";
 
-    // Price Change Queue Configuration
     public static final String PRICE_CHANGE_QUEUE = "price.change.queue";
     public static final String PRICE_CHANGE_EXCHANGE = "price.change.exchange";
-    public static final String PRICE_CHANGE_ROUTING_KEY = "price.change.routing.key";
+    public static final String PRICE_CHANGE_ROUTING_KEY = "price.change.#";
 
     @Bean
     public Queue salesQueue() {
@@ -68,4 +67,5 @@ public class RabbitMQConfig {
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
     }
+
 }

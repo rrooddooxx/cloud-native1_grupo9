@@ -19,6 +19,11 @@ spring:
     hikari:
       maximum-pool-size: 4
       connection-timeout: 30000
+  rabbitmq:
+    port: 5672
+    username: user
+    password: password
+    host: rabbitmq
 logging:
   level:
     root: ${LOGGING_LEVEL_ROOT:INFO}
