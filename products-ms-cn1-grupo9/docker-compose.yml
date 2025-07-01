@@ -1,5 +1,7 @@
 services:
   products-service:
+    depends_on:
+      - rabbitmq
     build:
       context: .
       platforms:
@@ -12,27 +14,27 @@ services:
       - SPRING_APPLICATION_NAME=cn1-grupo9
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.OracleDialect
-      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@cn1g9_high?TNS_ADMIN=/app/wallet
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME:-CN1G9}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@cn1g9_tp?TNS_ADMIN=/app/wallet
+      - SPRING_DATASOURCE_USERNAME=CN1G9
+      - SPRING_DATASOURCE_PASSWORD=cu'b32i-Eu!}d*S
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=oracle.jdbc.driver.OracleDriver
       - SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=4
       - SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=30000
       - LOGGING_LEVEL_ROOT=INFO
-      - LOGGING_LEVEL_ORG_HIBERNATE=INFO
+      - LOGGING_LEVEL_ORG_HIBERNATE<=INFO
     volumes:
       - ./wallet:/app/wallet:ro
     restart: unless-stopped
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:4.1.1-management-alpine
     container_name: rabbitmq
-    ports:
-      - "5672:5672"     # Puerto para conexión desde apps
-      - "15672:15672"   # Panel web de administración
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     restart: unless-stopped

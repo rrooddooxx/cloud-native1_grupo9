@@ -17,7 +17,7 @@ FROM bellsoft/liberica-openjre-debian:21
 WORKDIR /app
 
 COPY --from=builder /app/build/libs/*.jar app.jar
-COPY wallet/ /app/wallet/
+COPY ./wallet/ /app/wallet/
 
 EXPOSE 8080
 
