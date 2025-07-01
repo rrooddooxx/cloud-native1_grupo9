@@ -5,18 +5,16 @@ import com.skravetz.cn1grupo9.config.RabbitMQConfig;
 import com.skravetz.cn1grupo9.dto.PriceChangeDTO;
 import com.skravetz.cn1grupo9.entity.PriceChangeLog;
 import com.skravetz.cn1grupo9.repository.PriceChangeLogRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -34,14 +32,12 @@ public class PriceChangeConsumer {
         try {
             log.info("Received price change message for product ID: {}", priceChangeDTO.getProductId());
 
-            // Create storage directory if it doesn't exist
             Path storageDir = Paths.get(storagePath);
             if (!Files.exists(storageDir)) {
                 Files.createDirectories(storageDir);
                 log.info("Created storage directory: {}", storagePath);
             }
 
-            // Generate filename
             String timestamp = priceChangeDTO.getChangeDate()
                     .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
             String fileName = String.format("price_change_%d_%s.json", 
@@ -49,11 +45,9 @@ public class PriceChangeConsumer {
             
             Path filePath = storageDir.resolve(fileName);
 
-            // Write JSON file
             objectMapper.writeValue(filePath.toFile(), priceChangeDTO);
             log.info("Price change JSON file created: {}", filePath.toString());
 
-            // Save file info to database
             PriceChangeLog priceChangeLog = new PriceChangeLog();
             priceChangeLog.setProductId(priceChangeDTO.getProductId());
             priceChangeLog.setChangeDate(priceChangeDTO.getChangeDate());
