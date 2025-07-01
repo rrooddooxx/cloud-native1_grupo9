@@ -1,4 +1,52 @@
-GET http://localhost:80/api/item?id=99
-Accept: application/json
+## ACTUALIZACIÓN DE PRECIO
+# curl -X POST http://localhost:8080/api/price-changes/update
+#    -H "Content-Type: application/json"
+#    -d '{
+#      "productId": 1,
+#      "productTitle": "Laptop HP",
+#      "oldPrice": 999.99,
+#      "newPrice": 899.99,
+#      "reason": "Black Friday discount",
+#      "updatedBy": "admin@company.com"
+#    }'
+POST http://localhost:8080/api/price-changes/update
+Content-Type: application/json
+
+{
+      "productId": 1,
+      "productTitle": "Laptop HP",
+      "oldPrice": 999.99,
+      "newPrice": 899.99,
+      "reason": "Black Friday discount",
+      "updatedBy": "admin@company.com"
+    }
 
 ###
+## TRANSACCIÓN DE VENTA PARA PROCESAR
+# curl -X POST http://localhost:8080/api/sales/transaction
+#    -H "Content-Type: application/json"
+#    -d '{
+#      "productId": 1,
+#      "productTitle": "Laptop HP",
+#      "price": 999.99,
+#      "quantity": 2,
+#      "customerId": "CUST001",
+#      "customerEmail": "customer@example.com"
+#    }'
+POST http://localhost:8080/api/sales/transaction
+Content-Type: application/json
+
+{
+      "productId": 1,
+      "productTitle": "Laptop HP",
+      "price": 999.99,
+      "quantity": 2,
+      "customerId": "CUST001",
+      "customerEmail": "customer@example.com"
+    }
+
+
+###
+
+## OBTENER LOS PRECIOS
+GET http://localhost:8080/api/files/price-changes
