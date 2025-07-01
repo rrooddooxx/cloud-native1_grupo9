@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,15 +23,13 @@ public class PriceChangeConsumer {
     private final PriceChangeLogRepository priceChangeLogRepository;
     private final ObjectMapper objectMapper;
 
-    @Value("${app.price-change.storage-path:/app/price-changes}")
-    private String storagePath;
-
-    @RabbitListener(queues = RabbitMQConfig.PRICE_CHANGE_QUEUE)
+  @RabbitListener(queues = RabbitMQConfig.PRICE_CHANGE_QUEUE)
     public void processPriceChangeMessage(PriceChangeDTO priceChangeDTO) {
         try {
             log.info("Received price change message for product ID: {}", priceChangeDTO.getProductId());
 
-            Path storageDir = Paths.get(storagePath);
+          String storagePath = "/app/price-changes";
+          Path storageDir = Paths.get(storagePath);
             if (!Files.exists(storageDir)) {
                 Files.createDirectories(storageDir);
                 log.info("Created storage directory: {}", storagePath);
