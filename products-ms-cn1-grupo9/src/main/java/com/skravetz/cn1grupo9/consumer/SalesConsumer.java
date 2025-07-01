@@ -14,42 +14,40 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SalesConsumer {
 
-    private final SaleRepository saleRepository;
+  private final SaleRepository saleRepository;
 
-    @RabbitListener(queues = RabbitMQConfig.SALES_QUEUE)
-    public void processSaleMessage(SaleDTO saleDTO) {
-        try {
-            log.info("Received sale message for transaction: {}", saleDTO.getTransactionId());
+  @RabbitListener(queues = RabbitMQConfig.SALES_QUEUE)
+  public void processSaleMessage(SaleDTO saleDTO) {
+    try {
+      log.info("Received sale message for transaction: {}", saleDTO.getTransactionId());
 
-            // Check if transaction already exists
-            if (saleRepository.findByTransactionId(saleDTO.getTransactionId()).isPresent()) {
-                log.warn("Sale with transaction ID {} already exists, skipping", saleDTO.getTransactionId());
-                return;
-            }
+      if (saleRepository.findByTransactionId(saleDTO.getTransactionId()).isPresent()) {
+        log.warn(
+            "Sale with transaction ID {} already exists, skipping", saleDTO.getTransactionId());
+        return;
+      }
 
-            // Convert DTO to Entity
-            Sale sale = new Sale();
-            sale.setProductId(saleDTO.getProductId());
-            sale.setProductTitle(saleDTO.getProductTitle());
-            sale.setPrice(saleDTO.getPrice());
-            sale.setQuantity(saleDTO.getQuantity());
-            sale.setTotalAmount(saleDTO.getTotalAmount());
-            sale.setCustomerId(saleDTO.getCustomerId());
-            sale.setCustomerEmail(saleDTO.getCustomerEmail());
-            sale.setSaleDate(saleDTO.getSaleDate());
-            sale.setTransactionId(saleDTO.getTransactionId());
+      Sale sale = new Sale();
+      sale.setProductId(saleDTO.getProductId());
+      sale.setProductTitle(saleDTO.getProductTitle());
+      sale.setPrice(saleDTO.getPrice());
+      sale.setQuantity(saleDTO.getQuantity());
+      sale.setTotalAmount(saleDTO.getTotalAmount());
+      sale.setCustomerId(saleDTO.getCustomerId());
+      sale.setCustomerEmail(saleDTO.getCustomerEmail());
+      sale.setSaleDate(saleDTO.getSaleDate());
+      sale.setTransactionId(saleDTO.getTransactionId());
 
-            // Save to database
-            Sale savedSale = saleRepository.save(sale);
-            
-            log.info("Sale saved successfully with ID: {} for transaction: {}", 
-                    savedSale.getId(), savedSale.getTransactionId());
+      Sale savedSale = saleRepository.save(sale);
 
-        } catch (Exception e) {
-            log.error("Error processing sale message for transaction: {}", 
-                    saleDTO.getTransactionId(), e);
-            // In production, you might want to send to a dead letter queue
-            throw new RuntimeException("Failed to process sale message", e);
-        }
+      log.info(
+          "Sale saved successfully with ID: {} for transaction: {}",
+          savedSale.getId(),
+          savedSale.getTransactionId());
+
+    } catch (Exception e) {
+      log.error("Error processing sale message for transaction: {}", saleDTO.getTransactionId(), e);
+      throw new RuntimeException("Failed to process sale message", e);
     }
+  }
 }
