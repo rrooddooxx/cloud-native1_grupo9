@@ -6,6 +6,13 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://login.microsoftonline.com/fd8b1c6f-f500-42ec-9595-bdeabada8987/v2.0
+  kafka:
+    bootstrap-servers:
+      - kafka-broker-1:29091
+      - kafka-broker-2:29092
+      - kafka-broker-3:29093
+    consumer:
+      group-id: bff-app
 server:
   port: 8080
 products:

@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:8081}
   error:
     include-stacktrace: never
 spring:
@@ -12,9 +12,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
   datasource:
-    url: jdbc:oracle:thin:@cn1g9_high?TNS_ADMIN=./wallet
+    url: jdbc:oracle:thin:@cn1g9_high?TNS_ADMIN=/Users/sebastiankravetz/Dev/Learning/DUOC_IngDesarrolloSoftware/CLOUD_NATIVE_1/cloud-native1_grupo9/bff/wallet
     username: CN1G9
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    password: cu'b32i-Eu!}d*S
     driver-class-name: oracle.jdbc.driver.OracleDriver
     hikari:
       maximum-pool-size: 4
