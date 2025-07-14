@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: sales-ms
+  rabbitmq:
+    port: 5672
+    username: user
+    password: password
+    host: rabbitmq
+  kafka:
+    bootstrap-servers:
+      - kafkabroker1:9091
+      - kafkabroker2:9092
+      - kafkabroker3:9093
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+  datasource:
+    url: jdbc:oracle:thin:@cn1g9_high?TNS_ADMIN=/app/wallet
+    username: CN1G9
+    password: cu'b32i-Eu!}d*S
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    hikari:
+      maximum-pool-size: 4
+      connection-timeout: 30000
+queue-rabbitmq:
+  sales:
+    exchange: sales.exchange
+    queue: sales.queue
+    routing-key: sales.#
+queue-kafka:
+  bootstrap-servers: "kafkabroker1:9091,kafkabroker2:9092,kafkabroker3:9093"
+  sale-finished-topic: sale_finished
+server:
+  port: 8080
