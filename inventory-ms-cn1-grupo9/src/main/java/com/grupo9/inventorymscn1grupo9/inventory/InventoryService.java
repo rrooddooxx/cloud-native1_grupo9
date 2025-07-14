@@ -3,6 +3,8 @@ package com.grupo9.inventorymscn1grupo9.inventory;
 import com.grupo9.inventorymscn1grupo9.product.Product;
 import com.grupo9.inventorymscn1grupo9.product.ProductRepository;
 import com.grupo9.inventorymscn1grupo9.sales.SaleEvent;
+import com.grupo9.inventorymscn1grupo9.stock.StockEvent;
+import com.grupo9.inventorymscn1grupo9.stock.StockMessagingProducer;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ public class InventoryService {
 
   private final InventoryRepository inventoryRepository;
   private final ProductRepository productRepository;
+  private final StockMessagingProducer stockMessagingProducer;
 
   public void checkNewSaleForInventory(Optional<SaleEvent> saleEvent) {
     if (saleEvent.isEmpty()) {
@@ -44,12 +47,19 @@ public class InventoryService {
       inventoryEntity.setProductId(sale.getProductId());
       inventoryEntity.setStockQuantity(0);
       inventoryRepository.save(inventoryEntity);
+      stockMessagingProducer.sendKafkaStockUpdatedMessage(
+          StockEvent.builder().productId(inventoryEntity.getProductId()).quantity(0).build());
       return;
     }
 
     InventoryEntity inventoryEntity = currentInventory.get();
-    inventoryEntity.setStockQuantity(1);
-
+    Integer newQuantity = inventoryEntity.getStockQuantity() + sale.getQuantity();
+    inventoryEntity.setStockQuantity(newQuantity);
+    stockMessagingProducer.sendKafkaStockUpdatedMessage(
+        StockEvent.builder()
+            .productId(inventoryEntity.getProductId())
+            .quantity(newQuantity)
+            .build());
     log.info("Inventory updated");
 
     // 4. publish message to "stock" kafka topic

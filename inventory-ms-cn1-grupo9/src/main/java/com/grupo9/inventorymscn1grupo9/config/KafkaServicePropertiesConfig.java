@@ -10,10 +10,16 @@ public class KafkaServicePropertiesConfig {
   private List<String> bootstrapServers;
 
   private Consumer consumer;
+  private Producer producer;
 
   @Data
   public static class Consumer {
     private List<String> bootstrapServers;
     private String groupId;
+  }
+
+  @Data
+  public static class Producer {
+    private List<String> bootstrapServers;
   }
 }
