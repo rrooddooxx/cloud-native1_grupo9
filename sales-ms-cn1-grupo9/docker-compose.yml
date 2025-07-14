@@ -1,0 +1,14 @@
+services:
+  sales-ms:
+    build:
+      context: .
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    ports:
+      - "8082:8080"
+    networks:
+      - shared
+networks:
+  shared:
+    external: true

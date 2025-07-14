@@ -1,0 +1,3 @@
+VHOST: /
+QUEUE: sales.queue
+INDEX: v2
