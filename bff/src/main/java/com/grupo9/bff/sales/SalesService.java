@@ -17,17 +17,25 @@ public class SalesService {
 
     private final RestTemplate restTemplate;
 
-    @Value("${products.service.base-url:http://localhost:8080}")
-    private String productsServiceBaseUrl;
+    @Value("${sales.service.base-url:http://localhost:8081}")
+    private String salesServiceBaseUrl;
 
     public void createSalesTransaction(SaleDTO saleDTO) {
         try {
-            String url = productsServiceBaseUrl + "/api/sales/transaction";
-            log.debug("Calling products service for sales transaction: {}", url);
+            String url = salesServiceBaseUrl + "/api/v1/sales/create";
+            log.debug("Calling sales service for sales transaction: {}", url);
+            
+            CreateSaleRequestDto salesRequest = CreateSaleRequestDto.builder()
+                .customerEmail(saleDTO.getCustomerEmail())
+                .customerId(saleDTO.getCustomerId())
+                .price(saleDTO.getPrice() != null ? saleDTO.getPrice().intValue() : null)
+                .productId(saleDTO.getProductId() != null ? saleDTO.getProductId().intValue() : null)
+                .quantity(saleDTO.getQuantity())
+                .build();
             
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<SaleDTO> request = new HttpEntity<>(saleDTO, headers);
+            HttpEntity<CreateSaleRequestDto> request = new HttpEntity<>(salesRequest, headers);
             
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
             log.info("Sales transaction created successfully with status: {}", response.getStatusCode());

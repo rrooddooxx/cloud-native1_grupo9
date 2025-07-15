@@ -57,9 +57,23 @@
       </form>
     </div>
 
+    <div class="promotion-section" *ngIf="promotionMessage">
+      <div class="alert" [ngClass]="promotionMessage.includes('Error') ? 'alert-danger' : 'alert-success'">
+        {{ promotionMessage }}
+      </div>
+    </div>
+
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="onClose()">
         Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-warning me-2" 
+        (click)="onCreatePromotion()"
+        [disabled]="isCreatingPromotion">
+        <i class="bi bi-star me-2"></i>
+        {{ isCreatingPromotion ? 'Creando...' : 'Crear Promoción' }}
       </button>
       <button 
         type="button" 
