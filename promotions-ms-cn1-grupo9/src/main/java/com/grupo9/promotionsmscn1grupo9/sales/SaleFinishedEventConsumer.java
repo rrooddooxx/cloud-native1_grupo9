@@ -1,5 +1,6 @@
 package com.grupo9.promotionsmscn1grupo9.sales;
 
+import com.grupo9.promotionsmscn1grupo9.config.KafkaConsumerConstants;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SaleFinishedEventConsumer {
 
-  private final CircularFifoQueue<SaleFinishedEvent> queue = new CircularFifoQueue<>(10);
+  private final CircularFifoQueue<SaleFinishedEvent> queue =
+      new CircularFifoQueue<>(KafkaConsumerConstants.READ_QUEUE_LENGTH);
 
   @KafkaListener(
       topics = "${queues.sales}",
@@ -19,7 +21,7 @@ public class SaleFinishedEventConsumer {
   private void listenEvent(SaleFinishedEvent saleFinishedEvent) {
     try {
       log.info("Received SaleFinishedEvent {}", saleFinishedEvent);
-      queue.add(saleFinishedEvent);
+      storeInQueue(saleFinishedEvent);
     } catch (Exception e) {
       log.error("Error processing SaleFinishedEvent {}", saleFinishedEvent, e);
     }
