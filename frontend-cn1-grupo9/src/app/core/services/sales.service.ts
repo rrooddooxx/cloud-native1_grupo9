@@ -27,7 +27,7 @@ export interface SaleResponse {
   providedIn: 'root'
 })
 export class SalesService {
-  private readonly baseUrl = 'http://localhost:8080/api/sales';
+  private readonly baseUrl = `${environment.bffUrl}/sales`;
 
   constructor(private http: HttpClient) {}
 

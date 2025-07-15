@@ -1,17 +1,17 @@
 services:
   products-service:
-    depends_on:
-      - rabbitmq
     build:
       context: .
       platforms:
         - "linux/amd64"
         - "linux/arm64"
     ports:
-      - "8080:8080"
+      - "8081:8080"
+    networks:
+      - shared
     environment:
-      - SERVER_PORT=${SERVER_PORT:-8080}
-      - SPRING_APPLICATION_NAME=cn1-grupo9
+      - SERVER_PORT=8080
+      - SPRING_APPLICATION_NAME=products-cn1-grupo9
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.OracleDialect
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@cn1g9_tp?TNS_ADMIN=/app/wallet
@@ -25,16 +25,6 @@ services:
     volumes:
       - ./wallet:/app/wallet:ro
     restart: unless-stopped
-
-  rabbitmq:
-    image: rabbitmq:4.1.1-management-alpine
-    container_name: rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: user
-      RABBITMQ_DEFAULT_PASS: password
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - ./rabbitmq:/var/lib/rabbitmq
-    restart: unless-stopped
+networks:
+  shared:
+    external: true

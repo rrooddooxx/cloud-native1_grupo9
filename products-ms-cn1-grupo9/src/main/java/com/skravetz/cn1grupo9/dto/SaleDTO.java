@@ -1,5 +1,6 @@
 package com.skravetz.cn1grupo9.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class SaleDTO {
     private BigDecimal totalAmount;
     private String customerId;
     private String customerEmail;
+    @JsonAlias("createdAt")
     private LocalDateTime saleDate;
     private String transactionId;
 }

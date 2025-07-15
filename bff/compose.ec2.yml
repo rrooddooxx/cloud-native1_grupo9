@@ -1,0 +1,14 @@
+services:
+  bff-service:
+    image: widew3b/bff-cn1g9:amd64
+    container_name: bff-cn1g9
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PRODUCTS_SERVICE_HOST=http://10.0.140.54:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

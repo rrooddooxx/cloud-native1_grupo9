@@ -1,0 +1,3 @@
+VHOST: /
+QUEUE: price.change.queue
+INDEX: v2
