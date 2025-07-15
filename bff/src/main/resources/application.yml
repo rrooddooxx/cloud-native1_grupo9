@@ -18,3 +18,12 @@ server:
 products:
   service:
     base-url: ${PRODUCTS_SERVICE_HOST}
+sales:
+  service:
+    base-url: ${SALES_SERVICE_HOST:http://localhost:8081}
+promotions:
+  service:
+    base-url: ${PROMOTIONS_SERVICE_HOST:http://localhost:8082}
+inventory:
+  service:
+    base-url: ${INVENTORY_SERVICE_HOST:http://localhost:8083}
