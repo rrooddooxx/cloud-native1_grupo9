@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from '../../../core/models/product';
+import { PromotionsService } from '../../../core/services/promotions.service';
 
 export interface PurchaseData {
   productId: number;
@@ -23,8 +24,10 @@ export class PurchaseModalComponent {
   @Output() purchase = new EventEmitter<PurchaseData>();
 
   purchaseForm: FormGroup;
+  isCreatingPromotion = false;
+  promotionMessage = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private promotionsService: PromotionsService) {
     this.purchaseForm = this.fb.group({
       quantity: [1, [Validators.required, Validators.min(1)]],
       customerId: ['', [Validators.required]],
@@ -55,5 +58,23 @@ export class PurchaseModalComponent {
     if (!this.product) return 0;
     const quantity = this.purchaseForm.get('quantity')?.value || 1;
     return this.product.finalPrice * quantity;
+  }
+
+  onCreatePromotion(): void {
+    if (!this.product) return;
+    
+    this.isCreatingPromotion = true;
+    this.promotionMessage = '';
+    
+    this.promotionsService.createPromotion(this.product.id).subscribe({
+      next: (result) => {
+        this.isCreatingPromotion = false;
+        this.promotionMessage = result.message;
+      },
+      error: (error) => {
+        this.isCreatingPromotion = false;
+        this.promotionMessage = 'Error creating promotion: ' + error.message;
+      }
+    });
   }
 }
