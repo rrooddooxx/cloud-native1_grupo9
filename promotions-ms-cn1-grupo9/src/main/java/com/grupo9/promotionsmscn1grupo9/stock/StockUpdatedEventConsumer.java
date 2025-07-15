@@ -1,5 +1,6 @@
 package com.grupo9.promotionsmscn1grupo9.stock;
 
+import com.grupo9.promotionsmscn1grupo9.config.KafkaConsumerConstants;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class StockUpdatedEventConsumer {
 
-  private final CircularFifoQueue<StockUpdatedEvent> queue = new CircularFifoQueue<>(10);
+  private final CircularFifoQueue<StockUpdatedEvent> queue =
+      new CircularFifoQueue<>(KafkaConsumerConstants.READ_QUEUE_LENGTH);
 
   @KafkaListener(
       topics = "${queues.stock}",
