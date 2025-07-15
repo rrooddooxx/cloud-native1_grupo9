@@ -36,6 +36,24 @@
             Mi Zona
           </a>
         </li>
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <a 
+            class="nav-link" 
+            routerLink="/promotions" 
+            routerLinkActive="active"
+            (click)="closeMenu()">
+            Promociones
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated">
+          <a 
+            class="nav-link" 
+            routerLink="/inventory" 
+            routerLinkActive="active"
+            (click)="closeMenu()">
+            Inventario
+          </a>
+        </li>
       </ul>
 
       <!-- User Actions -->
