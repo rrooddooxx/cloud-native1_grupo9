@@ -35,12 +35,15 @@ public class SalesService {
     if (sale.getTotalAmount() == null || sale.getTransactionId() == null) {
       return ValidatedSale.builder().status(false).build();
     }
+    log.info("Validating Sale {}", sale);
+    log.info("Validating ID {}", Long.valueOf(sale.getProductId()));
     Optional<Product> product = productService.getProductById(Long.valueOf(sale.getProductId()));
     if (product.isEmpty()) {
       return ValidatedSale.builder().status(false).build();
     }
 
     sale.setProductTitle(product.get().getTitle());
+    sale.setProductId(Math.toIntExact(product.get().getId()));
     log.info("Product from database: {}", product.get());
     log.info("Sale transformed: {}", sale);
     return ValidatedSale.builder().status(true).product(product.get()).sale(sale).build();
