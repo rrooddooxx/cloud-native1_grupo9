@@ -104,8 +104,9 @@ public class KafkaConfig {
         new DefaultErrorHandler(
             (consumerRecord, exception) ->
                 log.warn(
-                    "🛑 Deserialization failed for record at offset {}: {}",
+                    "🛑 Deserialization failed for record at offset {}: Topic: {}: Error: {}",
                     consumerRecord.offset(),
+                    consumerRecord.topic(),
                     exception.getMessage()),
             new FixedBackOff(0L, 0));
 

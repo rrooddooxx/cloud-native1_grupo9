@@ -1,13 +1,15 @@
 package com.grupo9.promotionsmscn1grupo9.sales;
 
 import java.time.ZonedDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class SaleFinishedEvent {
   private String customerEmail;
   private String customerId;

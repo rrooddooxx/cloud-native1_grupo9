@@ -1,5 +1,6 @@
 package com.grupo9.promotionsmscn1grupo9.config;
 
+import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -11,7 +12,7 @@ public class KafkaProperties {
 
   @Data
   public static class Consumer {
-    private String bootstrapServers;
+    private List<String> bootstrapServers;
     private String groupId;
   }
 }
