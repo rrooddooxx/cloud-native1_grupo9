@@ -7,3 +7,8 @@ services:
         - "linux/arm64"
     ports:
       - "8080:8080"
+    networks:
+      - shared
+networks:
+  shared:
+    external: true
