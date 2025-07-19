@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from '../../../core/models/product';
 import { PromotionsService } from '../../../core/services/promotions.service';
 
@@ -14,6 +15,8 @@ export interface PurchaseData {
 
 @Component({
   selector: 'app-purchase-modal',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './purchase-modal.component.html',
   styleUrls: ['./purchase-modal.component.scss']
 })

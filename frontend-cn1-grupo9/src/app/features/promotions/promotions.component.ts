@@ -19,7 +19,7 @@ import { Product } from '../../core/models';
           <select id="productSelect" [(ngModel)]="selectedProductId" class="form-control">
             <option value="">-- Select a Product --</option>
             <option *ngFor="let product of products" [value]="product.id">
-              {{product.title}} - ${{product.originalPrice}}
+              {{product.title}} - {{product.originalPrice | currency}}
             </option>
           </select>
         </div>
