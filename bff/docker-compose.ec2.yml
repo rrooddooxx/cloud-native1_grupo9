@@ -1,0 +1,17 @@
+services:
+  bff-service:
+    image: 372018496245.dkr.ecr.us-east-1.amazonaws.com/cn1g9-bff:latest
+    container_name: bff-cn1g9
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+     - PRODUCTS_SERVICE_HOST=http://ip-10-0-136-236.ec2.internal:8081
+     - SALES_SERVICE_HOST=http://ip-10-0-141-185.ec2.internal:8082
+     - INVENTORY_SERVICE_HOST=http://ip-10-0-129-216.ec2.internal:8083
+     - PROMOTIONS_SERVICE_HOST=http://ip-10-0-143-69.ec2.internal:8084
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
