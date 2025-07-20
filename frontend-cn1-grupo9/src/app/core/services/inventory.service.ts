@@ -20,10 +20,10 @@ export class InventoryService {
   constructor(private http: HttpClient) { }
 
   getAllInventory(): Observable<Inventory[]> {
-    return this.http.get<Inventory[]>(`${environment.bffUrl}/inventory`);
+    return this.http.get<Inventory[]>(`${environment.bffUrl}/public/inventory`);
   }
 
   getInventoryByProductId(productId: number): Observable<Inventory> {
-    return this.http.get<Inventory>(`${environment.bffUrl}/inventory/product/${productId}`);
+    return this.http.get<Inventory>(`${environment.bffUrl}/public/inventory/product/${productId}`);
   }
 }

@@ -5,7 +5,13 @@ import { environment } from '../../../environments/environment';
 
 export interface PromotionResponse {
   productId: number;
-  promotion: any;
+  promotion: {
+    "promotionId": string,
+    "productId": number,
+    "status": string,
+    "price": number,
+    "percentageApplied": number,
+  } | null;
   status: string;
   message: string;
 }
@@ -18,6 +24,6 @@ export class PromotionsService {
   constructor(private http: HttpClient) { }
 
   createPromotion(productId: number): Observable<PromotionResponse> {
-    return this.http.post<PromotionResponse>(`${environment.bffUrl}/promotions/create/${productId}`, {});
+    return this.http.post<PromotionResponse>(`${environment.bffUrl}/private/promotions/create/${productId}`, {});
   }
 }

@@ -1,5 +1,7 @@
 services:
   sales-ms:
+    hostname: sales-ms
+    container_name: sales-ms
     build:
       context: .
       platforms:

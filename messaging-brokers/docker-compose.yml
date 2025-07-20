@@ -19,6 +19,8 @@ services:
     hostname: zookeeper-1
     ports:
       - "2181:2181"
+    volumes:
+      - ./zookeeper-1:/var/lib/zookeeper/data
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -27,6 +29,7 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: "zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888"
       ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS: 'true'
+      ZOOKEEPER_LOG_LEVEL: WARN
     networks:
       - shared
     healthcheck:
@@ -42,6 +45,8 @@ services:
       - zookeeper-1
     ports:
       - "2182:2181"
+    volumes:
+      - ./zookeeper-2:/var/lib/zookeeper/data
     environment:
       ZOOKEEPER_SERVER_ID: 2
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -50,6 +55,7 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: "zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888"
       ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS: 'true'
+      ZOOKEEPER_LOG_LEVEL: WARN
     networks:
       - shared
     healthcheck:
@@ -66,6 +72,8 @@ services:
       - zookeeper-2
     ports:
       - "2183:2181"
+    volumes:
+      - ./zookeeper-3:/var/lib/zookeeper/data
     environment:
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -74,6 +82,7 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: "zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888"
       ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS: 'true'
+      ZOOKEEPER_LOG_LEVEL: WARN
     networks:
       - shared
     healthcheck:
@@ -104,6 +113,12 @@ services:
       KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker1:9091,EXTERNAL://localhost:29091'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9091,EXTERNAL://0.0.0.0:29091'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_LOG_RETENTION_BYTES: 1073741824
+      KAFKA_LOG_SEGMENT_BYTES: 134217728
+      KAFKA_LOG_CLEANUP_POLICY: 'delete'
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_LOG4J_ROOT_LOGLEVEL: WARN
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9091" ]
       interval: 10s
@@ -132,6 +147,12 @@ services:
       KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker2:9092,EXTERNAL://localhost:29092'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_LOG_RETENTION_BYTES: 1073741824
+      KAFKA_LOG_SEGMENT_BYTES: 134217728
+      KAFKA_LOG_CLEANUP_POLICY: 'delete'
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_LOG4J_ROOT_LOGLEVEL: WARN
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
       interval: 10s
@@ -160,6 +181,12 @@ services:
       KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker3:9093,EXTERNAL://localhost:29093'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:29093'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_LOG_RETENTION_BYTES: 1073741824
+      KAFKA_LOG_SEGMENT_BYTES: 134217728
+      KAFKA_LOG_CLEANUP_POLICY: 'delete'
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_LOG4J_ROOT_LOGLEVEL: WARN
     healthcheck:
       test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9093" ]
       interval: 10s

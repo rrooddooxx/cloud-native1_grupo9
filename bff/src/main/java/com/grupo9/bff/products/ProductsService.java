@@ -30,7 +30,7 @@ public class ProductsService {
     public List<Product> getAllProducts() {
         try {
             String url = productsServiceBaseUrl + "/api/products";
-            log.debug("Calling products service: {}", url);
+            log.info("Calling products service: {}", url);
             
             String response = restTemplate.getForObject(url, String.class);
             List<Map<String, Object>> rawProducts = objectMapper.readValue(response, new TypeReference<>() {});

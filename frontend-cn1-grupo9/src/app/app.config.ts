@@ -3,6 +3,7 @@ import {provideRouter} from '@angular/router';
 import {
     MSAL_GUARD_CONFIG,
     MSAL_INSTANCE,
+    MSAL_INTERCEPTOR_CONFIG,
     MsalBroadcastService,
     MsalGuard,
     MsalInterceptor,
@@ -15,7 +16,7 @@ import {
     withFetch,
     withInterceptorsFromDi
 } from "@angular/common/http";
-import {MsalGuardConfigurationFactory, MSALInstanceFactory} from './config/msal.config';
+import {MsalGuardConfigurationFactory, MSALInstanceFactorySync, MSALInterceptorConfigFactory} from './config/msal.config';
 import {AuthInterceptor} from "./interceptors/auth-interceptor.interceptor";
 
 export const appConfig: ApplicationConfig = {
@@ -36,11 +37,15 @@ export const appConfig: ApplicationConfig = {
         },
         {
             provide: MSAL_INSTANCE,
-            useFactory: MSALInstanceFactory,
+            useFactory: MSALInstanceFactorySync,
         },
         {
             provide: MSAL_GUARD_CONFIG,
             useFactory: MsalGuardConfigurationFactory,
+        },
+        {
+            provide: MSAL_INTERCEPTOR_CONFIG,
+            useFactory: MSALInterceptorConfigFactory,
         },
         MsalService,
         MsalBroadcastService,

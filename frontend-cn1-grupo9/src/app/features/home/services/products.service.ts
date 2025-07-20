@@ -12,10 +12,10 @@ export class ProductsService {
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${environment.bffUrl}/products`);
+    return this.http.get<Product[]>(`${environment.bffUrl}/public/products`);
   }
 
   getProductById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${environment.bffUrl}/products/${id}`);
+    return this.http.get<Product>(`${environment.bffUrl}/public/products/${id}`);
   }
 }

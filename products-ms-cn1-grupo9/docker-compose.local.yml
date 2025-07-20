@@ -1,5 +1,7 @@
 services:
   products-service:
+    hostname: products-ms
+    container_name: products-ms
     build:
       context: .
       platforms:

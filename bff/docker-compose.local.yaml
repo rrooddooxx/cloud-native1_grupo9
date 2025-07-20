@@ -9,6 +9,11 @@ services:
       - "8080:8080"
     networks:
       - shared
+    environment:
+      - PRODUCTS_SERVICE_HOST=http://products-ms:8080
+      - SALES_SERVICE_HOST=http://sales-ms:8080
+      - PROMOTIONS_SERVICE_HOST=http://promotions-ms:8080
+      - INVENTORY_SERVICE_HOST=http://inventory-ms:8080
 networks:
   shared:
     external: true

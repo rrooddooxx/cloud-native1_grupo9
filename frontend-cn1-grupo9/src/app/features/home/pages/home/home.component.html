@@ -15,9 +15,9 @@
       </div>
       <div class="col-lg-6 d-none d-lg-block">
         <div class="hero-image">
-          <img 
-            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop" 
-            alt="Hero Image" 
+          <img
+            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop"
+            alt="Hero Image"
             class="img-fluid rounded">
         </div>
       </div>
@@ -39,7 +39,7 @@
       <div class="col-lg-4 col-md-6" *ngFor="let product of products">
         <div class="card card-modern h-100 position-relative">
           <!-- Promotion Badge -->
-          <div 
+          <div
             *ngIf="product.promotion && isPromotionValid(product.promotion)"
             class="position-absolute top-0 start-0 m-3 z-index-1">
             <span class="badge bg-danger fs-6">
@@ -49,8 +49,8 @@
 
           <!-- Product Image -->
           <div class="card-img-container position-relative overflow-hidden">
-            <img 
-              [src]="product.imageUrl" 
+            <img
+              [src]="product.imageUrl"
               [alt]="product.title"
               class="card-img-top product-image">
             <div class="overlay-gradient"></div>
@@ -59,7 +59,7 @@
           <div class="card-body d-flex flex-column">
             <h5 class="card-title text-brand">{{ product.title }}</h5>
             <p class="card-text text-secondary flex-grow-1">{{ product.description }}</p>
-            
+
             <!-- Pricing -->
             <div class="pricing-section mb-3">
               <div *ngIf="product.promotion && isPromotionValid(product.promotion); else normalPrice">
@@ -76,8 +76,8 @@
             </div>
 
             <!-- Promotion Timer -->
-            <div 
-              *ngIf="product.promotion && isPromotionValid(product.promotion)" 
+            <div
+              *ngIf="product.promotion && isPromotionValid(product.promotion)"
               class="promotion-timer mb-3">
               <small class="text-muted">
                 <i class="bi bi-clock me-1"></i>
@@ -86,7 +86,7 @@
             </div>
 
             <!-- Buy Button -->
-            <button 
+            <button
               class="btn btn-primary-custom w-100"
               (click)="buyProduct(product)">
               <i class="bi bi-cart-plus me-2"></i>
