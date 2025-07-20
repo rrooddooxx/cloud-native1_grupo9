@@ -23,55 +23,75 @@ services:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: |
-      server.1: zookeeper-1:2888:3888
-      server.2: zookeeper-2:2888:3888
-      server.3: zookeeper-3:2888:3888
+      ZOOKEEPER_SERVERS: "zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888"
+      ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS: 'true'
     networks:
       - shared
+    healthcheck:
+      test: [ "CMD", "echo", "ruok", "|", "nc", "localhost", "2181" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   zookeeper-2:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper-2
     hostname: zookeeper-2
+    depends_on:
+      - zookeeper-1
     ports:
       - "2182:2181"
     environment:
       ZOOKEEPER_SERVER_ID: 2
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: |
-        server.1: zookeeper-1:2888:3888
-        server.2: zookeeper-2:2888:3888
-        server.3: zookeeper-3:2888:3888
+      ZOOKEEPER_SERVERS: "zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888"
+      ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS: 'true'
     networks:
       - shared
+    healthcheck:
+      test: [ "CMD", "echo", "ruok", "|", "nc", "localhost", "2181" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   zookeeper-3:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper-3
     hostname: zookeeper-3
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
     ports:
       - "2183:2181"
     environment:
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: |
-        server.1: zookeeper-1:2888:3888
-        server.2: zookeeper-2:2888:3888
-        server.3: zookeeper-3:2888:3888
+      ZOOKEEPER_SERVERS: "zookeeper-1:2888:3888;zookeeper-2:2888:3888;zookeeper-3:2888:3888"
+      ZOOKEEPER_QUORUM_LISTEN_ON_ALL_IPS: 'true'
     networks:
       - shared
+    healthcheck:
+      test: [ "CMD", "echo", "ruok", "|", "nc", "localhost", "2181" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   kafkabroker1:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafkabroker1
     hostname: kafkabroker1
     depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
     ports:
       - "29091:29091"
     networks:
@@ -84,14 +104,22 @@ services:
       KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker1:9091,EXTERNAL://localhost:29091'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9091,EXTERNAL://0.0.0.0:29091'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    healthcheck:
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9091" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   kafkabroker2:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafkabroker2
     hostname: kafkabroker2
     depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
     ports:
       - "29092:29092"
     networks:
@@ -104,14 +132,22 @@ services:
       KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker2:9092,EXTERNAL://localhost:29092'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    healthcheck:
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   kafkabroker3:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafkabroker3
     hostname: kafkabroker3
     depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
     ports:
       - "29093:29093"
     networks:
@@ -124,14 +160,25 @@ services:
       KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker3:9093,EXTERNAL://localhost:29093'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:29093'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    healthcheck:
+      test: [ "CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9093" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   kafbat-ui:
     depends_on:
-      - kafkabroker1
-      - kafkabroker2
-      - kafkabroker3
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
+      kafkabroker1:
+        condition: service_healthy
+      kafkabroker2:
+        condition: service_healthy
+      kafkabroker3:
+        condition: service_healthy
+      zookeeper-1:
+        condition: service_healthy
+      zookeeper-2:
+        condition: service_healthy
+      zookeeper-3:
+        condition: service_healthy
     container_name: kafbat-ui
     image: ghcr.io/kafbat/kafka-ui:latest
     ports:

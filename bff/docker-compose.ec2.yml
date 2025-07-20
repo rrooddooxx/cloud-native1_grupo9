@@ -1,6 +1,6 @@
 services:
   bff-service:
-    image: 372018496245.dkr.ecr.us-east-1.amazonaws.com/cn1g9-bff:latest
+    image: widew3b/cn1g9-bff:latest
     container_name: bff-cn1g9
     restart: unless-stopped
     ports:
