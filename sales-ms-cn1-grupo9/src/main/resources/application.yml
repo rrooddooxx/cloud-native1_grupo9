@@ -5,7 +5,7 @@ spring:
     port: 5672
     username: user
     password: password
-    host: rabbitmq
+    host: ${RABBITMQ_HOST}
   kafka:
     bootstrap-servers:
       - ${KAFKA_BROKER_1_HOST:kafkabroker1:9091}

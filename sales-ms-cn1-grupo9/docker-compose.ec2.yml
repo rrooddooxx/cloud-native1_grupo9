@@ -11,3 +11,4 @@ services:
       - KAFKA_BROKER_2_HOST=ip-10-0-128-42.ec2.internal:29092
       - KAFKA_BROKER_3_HOST=ip-10-0-128-42.ec2.internal:29093
       - KAFKA_BOOTSTRAP_STRING="ip-10-0-128-42.ec2.internal:29091,ip-10-0-128-42.ec2.internal:29092,ip-10-0-128-42.ec2.internal:29093"
+      - RABBITMQ_HOST=ip-10-0-128-42.ec2.internal
