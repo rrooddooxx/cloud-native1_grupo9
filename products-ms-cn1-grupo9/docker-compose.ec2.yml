@@ -18,5 +18,5 @@ services:
       - SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=30000
       - LOGGING_LEVEL_ROOT=INFO
       - LOGGING_LEVEL_ORG_HIBERNATE<=INFO
-      - RABBITMQ_HOST=ip-10-0-141-134.ec2.internal
+      - RABBITMQ_HOST=ip-10-0-128-42.ec2.internal
     restart: unless-stopped
