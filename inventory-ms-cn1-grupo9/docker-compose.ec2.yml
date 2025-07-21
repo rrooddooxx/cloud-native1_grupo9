@@ -1,14 +1,22 @@
 services:
-  bff-service:
-    image: widew3b/bff-cn1g9:amd64
-    container_name: bff-cn1g9
+  inventory-ms:
+    hostname: inventory-ms
+    container_name: inventory-ms
     restart: unless-stopped
+    build:
+      context: .
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
     ports:
-      - "8080:8080"
+      - "8084:8080"
     environment:
       - PRODUCTS_SERVICE_HOST=http://10.0.140.54:8080
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - KAFKA_BROKER_1_HOST=ip-10-0-141-134.ec2.internal:9091
+      - KAFKA_BROKER_2_HOST=ip-10-0-141-134.ec2.internal:9092
+      - KAFKA_BROKER_3_HOST=ip-10-0-141-134.ec2.internal:9093
+    networks:
+      - shared
+networks:
+  shared:
+    external: true
