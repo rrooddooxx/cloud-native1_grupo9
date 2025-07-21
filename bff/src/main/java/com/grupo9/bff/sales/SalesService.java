@@ -2,28 +2,20 @@ package com.grupo9.bff.sales;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import com.grupo9.bff.config.RabbitMQConfig;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class SalesService {
 
-    private final RestTemplate restTemplate;
-
-    @Value("${sales.service.base-url:http://localhost:8081}")
-    private String salesServiceBaseUrl;
+    private final RabbitTemplate rabbitTemplate;
 
     public void createSalesTransaction(SaleDTO saleDTO) {
         try {
-            String url = salesServiceBaseUrl + "/api/v1/sales/create";
-            log.debug("Calling sales service for sales transaction: {}", url);
+            log.debug("Sending sales transaction message to RabbitMQ");
             
             CreateSaleRequestDto salesRequest = CreateSaleRequestDto.builder()
                 .customerEmail(saleDTO.getCustomerEmail())
@@ -33,15 +25,16 @@ public class SalesService {
                 .quantity(saleDTO.getQuantity())
                 .build();
             
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<CreateSaleRequestDto> request = new HttpEntity<>(salesRequest, headers);
+            rabbitTemplate.convertAndSend(
+                RabbitMQConfig.SALES_EXCHANGE, 
+                RabbitMQConfig.SALES_ROUTING_KEY, 
+                salesRequest
+            );
             
-            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-            log.info("Sales transaction created successfully with status: {}", response.getStatusCode());
+            log.info("Sales transaction message sent successfully to RabbitMQ with routing key: {}", RabbitMQConfig.SALES_ROUTING_KEY);
         } catch (Exception e) {
-            log.error("Error creating sales transaction", e);
-            throw new RuntimeException("Failed to create sales transaction", e);
+            log.error("Error sending sales transaction message to RabbitMQ", e);
+            throw new RuntimeException("Failed to send sales transaction message", e);
         }
     }
 }
