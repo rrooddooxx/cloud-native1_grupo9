@@ -12,6 +12,6 @@ services:
       - KAFKA_BROKER_3_HOST=ip-10-0-141-134.ec2.internal:9093
     networks:
       - shared
-  networks:n
-shared:
-  external: true
+networks:
+  shared:
+    external: true
