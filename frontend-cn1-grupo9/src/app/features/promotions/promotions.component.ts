@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PromotionsService, PromotionResponse } from '../../core/services/promotions.service';
+import {
+  PromotionsService,
+  PromotionResponse,
+} from '../../core/services/promotions.service';
 import { ProductsService } from '../home/services/products.service';
 import { Product } from '../../core/models';
 
@@ -9,7 +12,7 @@ import { Product } from '../../core/models';
   selector: 'app-promotions',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './promotions.component.html'
+  templateUrl: './promotions.component.html',
 })
 export class PromotionsComponent implements OnInit {
   products: Product[] = [];
@@ -34,13 +37,12 @@ export class PromotionsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading products:', error);
-      }
+      },
     });
   }
 
   createPromotion() {
     if (!this.selectedProductId) return;
-
 
     this.isLoading = true;
     this.promotionResult = null;
@@ -59,11 +61,11 @@ export class PromotionsComponent implements OnInit {
           productId: this.selectedProductId!,
           promotion: null,
           status: 'error',
-          message: 'Failed to create promotion: ' + error.message
+          message: 'Failed to create promotion: ' + error.message,
         };
         this.promotionHistory.unshift(this.promotionResult);
         this.isLoading = false;
-      }
+      },
     });
   }
 
