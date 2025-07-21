@@ -5,8 +5,6 @@ services:
     image: widew3b/cn1g9-products:latest
     ports:
       - "8081:8080"
-    networks:
-      - shared
     environment:
       - SERVER_PORT=8080
       - SPRING_APPLICATION_NAME=products-ms
@@ -24,6 +22,3 @@ services:
     volumes:
       - ./wallet:/app/wallet:ro
     restart: unless-stopped
-networks:
-  shared:
-    external: true
