@@ -11,8 +11,3 @@ services:
       - KAFKA_BROKER_2_HOST=ip-10-0-128-42.ec2.internal:9092
       - KAFKA_BROKER_3_HOST=ip-10-0-128-42.ec2.internal:9093
       - KAFKA_BOOTSTRAP_STRING="ip-10-0-128-42.ec2.internal:9091,ip-10-0-128-42.ec2.internal:9092,ip-10-0-128-42.ec2.internal:9093"
-    networks:
-      - shared
-networks:
-  shared:
-    external: true
