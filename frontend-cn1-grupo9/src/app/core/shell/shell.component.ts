@@ -10,6 +10,7 @@ import {
 } from "@azure/msal-angular";
 import {Subject, takeUntil} from "rxjs";
 import {AuthenticationResult, PopupRequest, EventType} from "@azure/msal-browser";
+import {SessionPersistenceService} from '../services/session-persistence.service';
 
 @Component({
     selector: 'app-shell',
@@ -32,13 +33,17 @@ export class ShellComponent implements OnInit, OnDestroy {
     constructor(
         @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
         private authService: MsalService,
-        private msalBroadcastService: MsalBroadcastService
+        private msalBroadcastService: MsalBroadcastService,
+        private sessionPersistence: SessionPersistenceService
     ) {
     }
 
     ngOnInit(): void {
         // Set initial authentication state
         this.updateAuthenticationState();
+        
+        // Check if user was previously authenticated and restore session
+        this.checkAndRestoreSession();
         
         // Subscribe to MSAL events to update authentication state
         this.msalBroadcastService.msalSubject$
@@ -58,7 +63,32 @@ export class ShellComponent implements OnInit, OnDestroy {
     }
 
     private updateAuthenticationState(): void {
-        this.isAuthenticated = Boolean(this.authService.instance.getActiveAccount() !== null);
+        this.isAuthenticated = this.sessionPersistence.isAuthenticated();
+    }
+
+    private checkAndRestoreSession(): void {
+        // Use the session persistence service
+        this.sessionPersistence.restoreSession().then(() => {
+            this.updateAuthenticationState();
+        });
+    }
+
+    private restoreJwtToken(): void {
+        const activeAccount = this.authService.instance.getActiveAccount();
+        if (activeAccount) {
+            this.authService.acquireTokenSilent({
+                scopes: ['User.Read'],
+                account: activeAccount
+            }).subscribe({
+                next: (tokenResponse) => {
+                    localStorage.setItem('jwt', tokenResponse.idToken);
+                    console.log('JWT token restored after page refresh');
+                },
+                error: (error) => {
+                    console.warn('Could not restore JWT token silently:', error);
+                }
+            });
+        }
     }
 
 
@@ -117,6 +147,9 @@ export class ShellComponent implements OnInit, OnDestroy {
     }
 
     logout(popup?: boolean) {
+        // Clear session data
+        this.sessionPersistence.clearSession();
+        
         if (popup) {
             this.authService.logoutPopup({
                 mainWindowRedirectUri: '/',
