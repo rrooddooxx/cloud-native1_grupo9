@@ -33,7 +33,7 @@ services:
     networks:
       - shared
     healthcheck:
-      test: [ "CMD", "echo", "ruok", "|", "nc", "localhost", "2181" ]
+      test: ["CMD", "sh", "-c", "echo ruok | nc localhost 2181"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,8 +41,6 @@ services:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper-2
     hostname: zookeeper-2
-    depends_on:
-      - zookeeper-1
     ports:
       - "2182:2181"
     volumes:
@@ -59,7 +57,7 @@ services:
     networks:
       - shared
     healthcheck:
-      test: [ "CMD", "echo", "ruok", "|", "nc", "localhost", "2181" ]
+      test: ["CMD", "sh", "-c", "echo ruok | nc localhost 2181"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -67,9 +65,6 @@ services:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper-3
     hostname: zookeeper-3
-    depends_on:
-      - zookeeper-1
-      - zookeeper-2
     ports:
       - "2183:2181"
     volumes:
@@ -86,7 +81,7 @@ services:
     networks:
       - shared
     healthcheck:
-      test: [ "CMD", "echo", "ruok", "|", "nc", "localhost", "2181" ]
+      test: ["CMD", "sh", "-c", "echo ruok | nc localhost 2181"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -110,7 +105,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
-      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker1:9091,EXTERNAL://ip-10-0-141-134.ec2.internal:29091'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker1:9091,EXTERNAL://${EXTERNAL_IP}:29091'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9091,EXTERNAL://0.0.0.0:29091'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_LOG_RETENTION_HOURS: 24
@@ -144,7 +139,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
-      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker2:9092,EXTERNAL://ip-10-0-141-134.ec2.internal:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker2:9092,EXTERNAL://${EXTERNAL_IP}:29092'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_LOG_RETENTION_HOURS: 24
@@ -178,7 +173,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181,zookeeper-3:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
-      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker3:9093,EXTERNAL://ip-10-0-141-134.ec2.internal:29093'
+      KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafkabroker3:9093,EXTERNAL://${EXTERNAL_IP}:29093'
       KAFKA_LISTENERS: 'INTERNAL://0.0.0.0:9093,EXTERNAL://0.0.0.0:29093'
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_LOG_RETENTION_HOURS: 24
