@@ -10,8 +10,3 @@ services:
       - KAFKA_BROKER_1_HOST=ip-10-0-141-134.ec2.internal:9091
       - KAFKA_BROKER_2_HOST=ip-10-0-141-134.ec2.internal:9092
       - KAFKA_BROKER_3_HOST=ip-10-0-141-134.ec2.internal:9093
-    networks:
-      - shared
-networks:
-  shared:
-    external: true
