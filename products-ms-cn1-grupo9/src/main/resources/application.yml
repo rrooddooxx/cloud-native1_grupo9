@@ -12,7 +12,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
   datasource:
-    url: jdbc:oracle:thin:@cn1g9_high?TNS_ADMIN=/Users/sebastiankravetz/Dev/Learning/DUOC_IngDesarrolloSoftware/CLOUD_NATIVE_1/cloud-native1_grupo9/bff/wallet
+    url: jdbc:oracle:thin:@cn1g9_high?TNS_ADMIN=/app/wallet
     username: CN1G9
     password: cu'b32i-Eu!}d*S
     driver-class-name: oracle.jdbc.driver.OracleDriver

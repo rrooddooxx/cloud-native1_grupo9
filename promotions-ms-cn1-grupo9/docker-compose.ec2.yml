@@ -3,11 +3,7 @@ services:
     hostname: promotions-ms
     container_name: promotions-ms
     restart: unless-stopped
-    build:
-      context: .
-      platforms:
-        - "linux/amd64"
-        - "linux/arm64"
+    image: widew3b/cn1g9-promotions:latest
     ports:
       - "8083:8080"
     environment:
