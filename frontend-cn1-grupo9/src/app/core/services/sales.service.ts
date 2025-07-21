@@ -4,12 +4,11 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface SaleRequest {
-  productId: number;
-  productTitle: string;
-  price: number;
-  quantity: number;
-  customerId: string;
   customerEmail: string;
+  customerId: string;
+  price: number;
+  productId: number;
+  quantity: number;
 }
 
 export interface SaleResponse {
@@ -27,7 +26,7 @@ export interface SaleResponse {
   providedIn: 'root'
 })
 export class SalesService {
-  private readonly baseUrl = `${environment.bffUrl}/sales`;
+  private readonly baseUrl = `${environment.bffUrl}/public/sales`;
 
   constructor(private http: HttpClient) {}
 

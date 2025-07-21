@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from '../../../core/models/product';
 import { PromotionsService } from '../../../core/services/promotions.service';
+import { SalesService, SaleRequest } from '../../../core/services/sales.service';
 
 export interface PurchaseData {
   productId: number;
@@ -30,7 +31,11 @@ export class PurchaseModalComponent {
   isCreatingPromotion = false;
   promotionMessage = '';
 
-  constructor(private fb: FormBuilder, private promotionsService: PromotionsService) {
+  constructor(
+    private fb: FormBuilder, 
+    private promotionsService: PromotionsService,
+    private salesService: SalesService
+  ) {
     this.purchaseForm = this.fb.group({
       quantity: [1, [Validators.required, Validators.min(1)]],
       customerId: ['', [Validators.required]],
@@ -45,15 +50,23 @@ export class PurchaseModalComponent {
   onPurchase(): void {
     if (this.purchaseForm.valid && this.product) {
       const formValue = this.purchaseForm.value;
-      const purchaseData: PurchaseData = {
-        productId: this.product.id,
-        productTitle: this.product.title,
-        price: this.product.finalPrice,
-        quantity: formValue.quantity,
+      const saleData: SaleRequest = {
+        customerEmail: formValue.customerEmail,
         customerId: formValue.customerId,
-        customerEmail: formValue.customerEmail
+        price: this.product.finalPrice * formValue.quantity,
+        productId: this.product.id,
+        quantity: formValue.quantity
       };
-      this.purchase.emit(purchaseData);
+      
+      this.salesService.createSale(saleData).subscribe({
+        next: (response) => {
+          console.log('Sale successful:', response);
+          this.onClose();
+        },
+        error: (error) => {
+          console.error('Sale failed:', error);
+        }
+      });
     }
   }
 

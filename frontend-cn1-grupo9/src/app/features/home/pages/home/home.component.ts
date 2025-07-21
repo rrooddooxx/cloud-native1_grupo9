@@ -75,18 +75,17 @@ export class HomeComponent implements OnInit {
 
     onPurchase(purchaseData: PurchaseData): void {
         const saleRequest: SaleRequest = {
-            productId: purchaseData.productId,
-            productTitle: purchaseData.productTitle,
-            price: purchaseData.price,
-            quantity: purchaseData.quantity,
+            customerEmail: purchaseData.customerEmail,
             customerId: purchaseData.customerId,
-            customerEmail: purchaseData.customerEmail
+            price: purchaseData.price,
+            productId: purchaseData.productId,
+            quantity: purchaseData.quantity
         };
 
         this.salesService.createSale(saleRequest).subscribe({
             next: (response) => {
                 console.log('Compra exitosa:', response);
-                alert(`¡Compra realizada exitosamente!\nProducto: ${response.productTitle}\nCantidad: ${response.quantity}\nTotal: $${response.price * response.quantity}`);
+                alert(`¡Compra realizada exitosamente!\nProducto: ${purchaseData.productTitle}\nCantidad: ${response.quantity}\nTotal: $${response.price}`);
                 this.onModalClose();
             },
             error: (error) => {
