@@ -6,6 +6,7 @@ import com.grupo9.inventorymscn1grupo9.sales.SaleEvent;
 import com.grupo9.inventorymscn1grupo9.stock.StockEvent;
 import com.grupo9.inventorymscn1grupo9.stock.StockMessagingProducer;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class InventoryService {
   private final ProductRepository productRepository;
   private final StockMessagingProducer stockMessagingProducer;
 
+  @Transactional
   public void checkNewSaleForInventory(Optional<SaleEvent> saleEvent) {
     if (saleEvent.isEmpty()) {
       log.error("Sale Event is empty");
@@ -33,7 +35,10 @@ public class InventoryService {
     return productRepository.findById(Long.valueOf(productId)).map(Product::fromEntity);
   }
 
-  @Transactional
+  public List<InventoryEntity> getAllInventory() {
+    return inventoryRepository.findAll();
+  }
+
   public void updateInventory(SaleEvent sale) {
     var foundProduct = checkProductOnSale(sale.getProductId());
     if (foundProduct.isEmpty()) {
@@ -61,7 +66,5 @@ public class InventoryService {
             .quantity(newQuantity)
             .build());
     log.info("Inventory updated");
-
-    // 4. publish message to "stock" kafka topic
   }
 }

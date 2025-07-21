@@ -1,0 +1,16 @@
+services:
+  inventory-ms:
+    hostname: inventory-ms
+    container_name: inventory-ms
+    build:
+      context: .
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    ports:
+      - "8084:8080"
+    networks:
+      - shared
+networks:
+  shared:
+    external: true

@@ -2,3 +2,6 @@
 **/.DS_Store
 .idea
 **/.idea
+.aws
+.aws/*
+.aws/aws-envs.sh

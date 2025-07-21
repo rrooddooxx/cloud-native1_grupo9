@@ -22,4 +22,6 @@ public class InventoryEntity {
 
   @Column(name = "STOCK_QUANTITY")
   private Integer stockQuantity;
+
+ 
 }

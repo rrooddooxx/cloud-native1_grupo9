@@ -6,6 +6,11 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://login.microsoftonline.com/fd8b1c6f-f500-42ec-9595-bdeabada8987/v2.0
+  rabbitmq:
+    port: 5672
+    username: user
+    password: password
+    host: rabbitmq
   kafka:
     bootstrap-servers:
       - kafka-broker-1:29091
@@ -17,13 +22,27 @@ server:
   port: 8080
 products:
   service:
-    base-url: ${PRODUCTS_SERVICE_HOST}
+    base-url: ${PRODUCTS_SERVICE_HOST:http://localhost:8081}
 sales:
   service:
-    base-url: ${SALES_SERVICE_HOST:http://localhost:8081}
+    base-url: ${SALES_SERVICE_HOST:http://localhost:8082}
 promotions:
   service:
-    base-url: ${PROMOTIONS_SERVICE_HOST:http://localhost:8082}
+    base-url: ${PROMOTIONS_SERVICE_HOST:http://localhost:8083}
 inventory:
   service:
-    base-url: ${INVENTORY_SERVICE_HOST:http://localhost:8083}
+    base-url: ${INVENTORY_SERVICE_HOST:http://localhost:8084}
+queue-rabbitmq:
+  sales:
+    exchange: sales.exchange
+    queue: sales.queue
+    routing-key: sales.sale_finished
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

@@ -103,7 +103,6 @@ export class HomeComponent implements OnInit {
     private loadProducts() {
         this.productsService.getProducts().subscribe({
             next: (products) => {
-                console.log('prod: ', products)
                 this.originalProducts = products;
                 this.products = this.mapToViewModel(products)
             },

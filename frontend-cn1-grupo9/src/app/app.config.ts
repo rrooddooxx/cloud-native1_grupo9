@@ -3,6 +3,7 @@ import {provideRouter} from '@angular/router';
 import {
     MSAL_GUARD_CONFIG,
     MSAL_INSTANCE,
+    MSAL_INTERCEPTOR_CONFIG,
     MsalBroadcastService,
     MsalGuard,
     MsalInterceptor,
@@ -13,30 +14,38 @@ import {
     HTTP_INTERCEPTORS,
     provideHttpClient,
     withFetch,
-    withInterceptors,
     withInterceptorsFromDi
 } from "@angular/common/http";
-import {MsalGuardConfigurationFactory, MSALInstanceFactory} from './config/msal.config';
-import {authInterceptorProvider} from "./interceptors/auth-interceptor.interceptor";
+import {MsalGuardConfigurationFactory, MSALInstanceFactorySync, MSALInterceptorConfigFactory} from './config/msal.config';
+import {AuthInterceptor} from "./interceptors/auth-interceptor.interceptor";
 
 export const appConfig: ApplicationConfig = {
     providers: [provideZoneChangeDetection({eventCoalescing: true}),
         provideRouter(routes),
-        provideHttpClient(withInterceptorsFromDi(),
-            withFetch(),
-            withInterceptors([authInterceptorProvider])),
+        provideHttpClient(
+            withInterceptorsFromDi(),
+            withFetch()),
         {
             provide: HTTP_INTERCEPTORS,
             useClass: MsalInterceptor,
             multi: true,
         },
         {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+        {
             provide: MSAL_INSTANCE,
-            useFactory: MSALInstanceFactory,
+            useFactory: MSALInstanceFactorySync,
         },
         {
             provide: MSAL_GUARD_CONFIG,
             useFactory: MsalGuardConfigurationFactory,
+        },
+        {
+            provide: MSAL_INTERCEPTOR_CONFIG,
+            useFactory: MSALInterceptorConfigFactory,
         },
         MsalService,
         MsalBroadcastService,

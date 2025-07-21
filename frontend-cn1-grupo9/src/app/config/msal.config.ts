@@ -10,8 +10,28 @@ import {environment} from '../../environments/environment';
 import {MsalGuardConfiguration, MsalInterceptorConfiguration} from "@azure/msal-angular";
 
 
-export function MSALInstanceFactory(): IPublicClientApplication {
-    return new PublicClientApplication(msalConfig);
+let msalInstance: IPublicClientApplication | null = null;
+
+export async function MSALInstanceFactory(): Promise<IPublicClientApplication> {
+    if (!msalInstance) {
+        msalInstance = new PublicClientApplication(msalConfig);
+        await msalInstance.initialize();
+        console.log('MSAL initialized successfully');
+    }
+    return msalInstance;
+}
+
+export function MSALInstanceFactorySync(): IPublicClientApplication {
+    if (!msalInstance) {
+        msalInstance = new PublicClientApplication(msalConfig);
+        // Initialize asynchronously but return immediately
+        msalInstance.initialize().then(() => {
+            console.log('MSAL initialized successfully');
+        }).catch((error) => {
+            console.error('MSAL initialization failed:', error);
+        });
+    }
+    return msalInstance;
 }
 
 export const msalConfig: Configuration = {

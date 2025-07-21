@@ -1,0 +1,16 @@
+services:
+  promotions-ms:
+    hostname: promotions-ms
+    container_name: promotions-ms
+    build:
+      context: .
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    ports:
+      - "8083:8080"
+    networks:
+      - shared
+networks:
+  shared:
+    external: true
