@@ -1,14 +1,13 @@
 services:
-  bff-service:
-    image: widew3b/bff-cn1g9:amd64
-    container_name: bff-cn1g9
-    restart: unless-stopped
+  products-service:
+    hostname: products-ms
+    container_name: products-ms
+    image: widew3b/cn1g9-products:latest
     ports:
-      - "8081:8081"
+      - "8081:8080"
     environment:
-      - PRODUCTS_SERVICE_HOST=http://10.0.140.54:8081
       - SERVER_PORT=8080
-      - SPRING_APPLICATION_NAME=products-cn1-grupo9
+      - SPRING_APPLICATION_NAME=products-ms
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.OracleDialect
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@cn1g9_tp?TNS_ADMIN=/app/wallet
@@ -19,10 +18,5 @@ services:
       - SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT=30000
       - LOGGING_LEVEL_ROOT=INFO
       - LOGGING_LEVEL_ORG_HIBERNATE<=INFO
-    volumes:
-      - ./wallet:/app/wallet:ro
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - RABBITMQ_HOST=ip-10-0-128-42.ec2.internal
+    restart: unless-stopped

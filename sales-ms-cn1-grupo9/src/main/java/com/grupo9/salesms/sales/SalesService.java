@@ -19,12 +19,14 @@ public class SalesService {
 
   public void createNewSale(CreateSaleRequestDto dto) {
     try {
+      log.info("Creating new sale for {}", dto);
       Sale newSale = dto.toDomain(UUID.randomUUID().toString());
       ValidatedSale validSale = validateSale(newSale);
       if (validSale.status().equals(false)) {
         throw new RuntimeException("Sale not valid");
       }
 
+      log.info("New sale created, Publishing...");
       publishSale(validSale.sale(), validSale.product());
     } catch (Exception e) {
       throw new RuntimeException("Error creating new sale: %s".formatted(e.getMessage()));
@@ -32,7 +34,9 @@ public class SalesService {
   }
 
   private ValidatedSale validateSale(Sale sale) {
+    log.info("Validating sale...");
     if (sale.getTotalAmount() == null || sale.getTransactionId() == null) {
+      log.error("Sale not valid: Amount or transaction id is null");
       return ValidatedSale.builder().status(false).build();
     }
     log.info("Validating Sale {}", sale);
@@ -53,7 +57,6 @@ public class SalesService {
     log.info("Processing sale transaction: {}", sale.getTransactionId());
 
     registerSaleInDatabase(sale, product);
-    msgSender.sendRabbitMqSalesMessage(sale);
     msgSender.sendKafkaSaleFinishedMessage(sale);
 
     log.info("Message sent to Queues: {}", sale);
@@ -64,6 +67,7 @@ public class SalesService {
 
   public void registerSaleInDatabase(Sale sale, Product product) {
     try {
+      log.info("Registering sale transaction in DB: {}", sale.getTransactionId());
       SalesEntity newSale = sale.toEntity(product.getTitle());
       salesRepository.save(newSale);
     } catch (Exception e) {

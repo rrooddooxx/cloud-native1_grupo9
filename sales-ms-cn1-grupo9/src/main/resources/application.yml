@@ -5,12 +5,12 @@ spring:
     port: 5672
     username: user
     password: password
-    host: rabbitmq
+    host: ${RABBITMQ_HOST}
   kafka:
     bootstrap-servers:
-      - kafkabroker1:9091
-      - kafkabroker2:9092
-      - kafkabroker3:9093
+      - ${KAFKA_BROKER_1_HOST:kafkabroker1:9091}
+      - ${KAFKA_BROKER_2_HOST:kafkabroker2:9092}
+      - ${KAFKA_BROKER_3_HOST:kafkabroker3:9093}
   jpa:
     hibernate:
       ddl-auto: update
@@ -29,9 +29,9 @@ queue-rabbitmq:
   sales:
     exchange: sales.exchange
     queue: sales.queue
-    routing-key: sales.#
+    routing-key: sales.sale_finished
 queue-kafka:
-  bootstrap-servers: "kafkabroker1:9091,kafkabroker2:9092,kafkabroker3:9093"
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_STRING}
   sale-finished-topic: sale_finished
 server:
   port: 8080

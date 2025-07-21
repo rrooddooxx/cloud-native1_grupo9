@@ -1,13 +1,12 @@
 services:
-  inventory-ms:
-    hostname: inventory-ms
-    container_name: inventory-ms
+  promotions-ms:
+    hostname: promotions-ms
+    container_name: promotions-ms
     restart: unless-stopped
-    image: widew3b/cn1g9-inventory:latest
+    image: widew3b/cn1g9-promotions:latest
     ports:
-      - "8084:8080"
+      - "8083:8080"
     environment:
-      - PRODUCTS_SERVICE_HOST=http://ip-10-0-136-236.ec2.internal:8081
       - KAFKA_BROKER_1_HOST=ip-10-0-128-42.ec2.internal:29091
       - KAFKA_BROKER_2_HOST=ip-10-0-128-42.ec2.internal:29092
       - KAFKA_BROKER_3_HOST=ip-10-0-128-42.ec2.internal:29093

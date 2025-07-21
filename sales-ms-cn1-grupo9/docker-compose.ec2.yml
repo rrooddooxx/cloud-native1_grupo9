@@ -1,14 +1,14 @@
 services:
-  bff-service:
-    image: widew3b/bff-cn1g9:amd64
-    container_name: bff-cn1g9
-    restart: unless-stopped
+  sales-ms:
+    hostname: sales-ms
+    container_name: sales-ms
+    image: widew3b/cn1g9-sales:latest
     ports:
-      - "8082:8081"
+      - "8082:8080"
     environment:
-      - PRODUCTS_SERVICE_HOST=http://10.0.140.54:8081
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - PRODUCTS_SERVICE_HOST=http://ip-10-0-136-236.ec2.internal:8081
+      - KAFKA_BROKER_1_HOST=ip-10-0-128-42.ec2.internal:29091
+      - KAFKA_BROKER_2_HOST=ip-10-0-128-42.ec2.internal:29092
+      - KAFKA_BROKER_3_HOST=ip-10-0-128-42.ec2.internal:29093
+      - KAFKA_BOOTSTRAP_STRING=ip-10-0-128-42.ec2.internal:29091,ip-10-0-128-42.ec2.internal:29092,ip-10-0-128-42.ec2.internal:29093
+      - RABBITMQ_HOST=ip-10-0-128-42.ec2.internal

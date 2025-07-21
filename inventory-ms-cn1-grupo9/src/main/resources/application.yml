@@ -3,23 +3,23 @@ spring:
     name: inventory-ms-cn1-grupo9
   kafka:
     bootstrap-servers:
-      - kafkabroker1:9091
-      - kafkabroker2:9092
-      - kafkabroker3:9093
+      - ${KAFKA_BROKER_1_HOST:kafkabroker1:9091}
+      - ${KAFKA_BROKER_2_HOST:kafkabroker2:9092}
+      - ${KAFKA_BROKER_3_HOST:kafkabroker3:9093}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       bootstrap-servers:
-        - kafkabroker1:9091
-        - kafkabroker2:9092
-        - kafkabroker3:9093
+        - ${KAFKA_BROKER_1_HOST:kafkabroker1:9091}
+        - ${KAFKA_BROKER_2_HOST:kafkabroker2:9092}
+        - ${KAFKA_BROKER_3_HOST:kafkabroker3:9093}
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       bootstrap-servers:
-        - kafkabroker1:9091
-        - kafkabroker2:9092
-        - kafkabroker3:9093
+        - ${KAFKA_BROKER_1_HOST:kafkabroker1:9091}
+        - ${KAFKA_BROKER_2_HOST:kafkabroker2:9092}
+        - ${KAFKA_BROKER_3_HOST:kafkabroker3:9093}
       group-id: inventory-ms-consumer-group
       properties:
         spring.json.trusted.packages: com.grupo9.inventorymscn1grupo9.sales

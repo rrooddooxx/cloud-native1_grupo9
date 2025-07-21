@@ -3,14 +3,14 @@ spring:
     name: promotions-ms-cn1-grupo9
   kafka:
     bootstrap-servers:
-      - kafkabroker1:9091
-      - kafkabroker2:9092
-      - kafkabroker3:9093
+      - ${KAFKA_BROKER_1_HOST:kafkabroker1:9091}
+      - ${KAFKA_BROKER_2_HOST:kafkabroker2:9092}
+      - ${KAFKA_BROKER_3_HOST:kafkabroker3:9093}
     consumer:
       bootstrap-servers:
-        - kafkabroker1:9091
-        - kafkabroker2:9092
-        - kafkabroker3:9093
+        - ${KAFKA_BROKER_1_HOST:kafkabroker1:9091}
+        - ${KAFKA_BROKER_2_HOST:kafkabroker2:9092}
+        - ${KAFKA_BROKER_3_HOST:kafkabroker3:9093}
       group-id: promotions-ms-consumer-group
   jpa:
     hibernate:

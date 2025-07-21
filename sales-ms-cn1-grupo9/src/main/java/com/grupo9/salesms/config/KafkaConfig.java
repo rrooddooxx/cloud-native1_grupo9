@@ -4,6 +4,7 @@ import com.grupo9.salesms.sales.Sale;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.TopicConfig;
@@ -17,12 +18,14 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaConfig {
 
   private final KafkaProperties properties;
 
   @Bean
   public DefaultKafkaProducerFactory<String, Sale> saleFinishedKafkaListenerContainerFactory() {
+    log.info("BOOTSTRAP SERVERS: {}", properties.getBootstrapServers());
     Map<String, Object> props = new HashMap<>();
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
