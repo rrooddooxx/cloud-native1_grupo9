@@ -20,7 +20,7 @@ services:
     ports:
       - "2181:2181"
     volumes:
-      - ./zookeeper-1:/var/lib/zookeeper/data
+      - zookeeper-1-data:/var/lib/zookeeper/data
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -46,7 +46,7 @@ services:
     ports:
       - "2182:2181"
     volumes:
-      - ./zookeeper-2:/var/lib/zookeeper/data
+      - zookeeper-2-data:/var/lib/zookeeper/data
     environment:
       ZOOKEEPER_SERVER_ID: 2
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -73,7 +73,7 @@ services:
     ports:
       - "2183:2181"
     volumes:
-      - ./zookeeper-3:/var/lib/zookeeper/data
+      - zookeeper-3-data:/var/lib/zookeeper/data
     environment:
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -220,3 +220,7 @@ networks:
   shared:
     name: shared
     driver: bridge
+volumes:
+  zookeeper-1-data:
+  zookeeper-2-data:
+  zookeeper-3-data:
