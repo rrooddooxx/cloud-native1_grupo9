@@ -13,13 +13,15 @@ public class SalesConsumer {
 
   private final SalesService salesService;
 
-  /* @RabbitListener(queues = "${queue-rabbitmq.sales.queue}")
+  @RabbitListener(queues = "${queue-rabbitmq.sales.queue}")
   public void receiveMessage(@Payload CreateSaleRequestDto message) {
     log.info("Received message: {}", message);
     try {
-      log.info("Message processed successfully");
+      log.info("Creating Sale Request: {}", message);
+      salesService.createNewSale(message);
+      log.info("Sale Proccessed Success!!");
     } catch (Exception e) {
       log.error("Error processing message: {}", e.getMessage(), e);
     }
-  }*/
+  }
 }

@@ -29,7 +29,7 @@ queue-rabbitmq:
   sales:
     exchange: sales.exchange
     queue: sales.queue
-    routing-key: sales.#
+    routing-key: sales.sale_finished
 queue-kafka:
   bootstrap-servers: "kafkabroker1:9091,kafkabroker2:9092,kafkabroker3:9093"
   sale-finished-topic: sale_finished
